@@ -1,0 +1,33 @@
+{
+  "name": "mylifetimeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite build && vite preview",
+    "serve": "vite preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@suid/vite-plugin": "^0.1.5",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "solid-devtools": "^0.29.2",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-solid": "^2.8.0"
+  },
+  "dependencies": {
+    "@suid/material": "^0.15.1",
+    "@types/uuid": "^9.0.7",
+    "sass": "^1.69.5",
+    "solid-icons": "^1.1.0",
+    "solid-js": "^1.8.7",
+    "uuid": "^9.0.1"
+  }
+}
