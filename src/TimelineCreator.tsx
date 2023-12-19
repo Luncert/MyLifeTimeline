@@ -2,7 +2,8 @@ import { Show, createContext } from "solid-js";
 import { ResourceBrowser } from "./ResourceBrowser";
 import { createData, useCtx } from "./utils";
 import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegistry";
-import { DraggingResource } from "./Resource";
+import { MediaResource } from "./Resource";
+import ResourceCanvas from "./ResourceCanvas";
 
 export const Events = {
   DragTo: 'TimelineCreator:DragTo'
@@ -35,12 +36,18 @@ export default function TimelineCreator() {
     draggingTo([evt.clientX, evt.clientY]);
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (evt: MouseEvent) => {
     const res = dragging();
     if (res) {
       dragging(null);
       globalCustomEventRegistry.dispatch(
-        new CustomEvent(Events.DragTo, { detail: { res } }));
+        new CustomEvent(Events.DragTo, {
+          detail: {
+            res,
+            pos: [evt.clientX, evt.clientY],
+            target: evt.target
+          }
+        }));
     }
     eventRegistry.off(window, 'mousemove');
     eventRegistry.off(window, 'mouseup');
@@ -56,18 +63,10 @@ export default function TimelineCreator() {
           top: draggingTo()[1] + "px",
         }}>
           <Show when={dragging() !== null}>
-            <DraggingResource res={dragging() as Res} />
+            <MediaResource res={dragging() as Res} />
           </Show>
         </div>
-        
-        <div class="w-full h-full" style={{
-          "background-color": "white",
-          "background-image": "radial-gradient(#e4e4e7 3px, #fafafa 1px)",
-          "background-size": "50px 50px",
-          "background-position": "-25px -25px",
-        }}>
-
-        </div>
+        <ResourceCanvas />
         <ResourceBrowser />
       </div>
     </DraggingResourceContext.Provider>

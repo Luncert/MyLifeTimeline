@@ -1,39 +1,31 @@
-import { Box, IconButton } from "@suid/material";
-import { Match, Show, Switch } from "solid-js";
+import { Box, IconButton, styled } from "@suid/material";
+import { Match, Show, Switch, splitProps } from "solid-js";
 import { createData } from "./utils";
 import { AiFillDelete } from 'solid-icons/ai';
 import { useDraggingResource } from "./TimelineCreator";
 
-export function Resource(props: {
+export function _DraggableResource(props: {
   res: Res;
-  draggable?: boolean;
+  onDrag?: () => void;
   onRemove?: () => void;
 }) {
+  const [local, others] = splitProps(props, ['res', 'onRemove']);
   const rb = useDraggingResource();
   const hovered = createData(false);
 
   return (
     <Box class="relative drop-shadow rounded-md overflow-hidden"
       onMouseDown={(e) => {
-        if (props.draggable) {
-          rb.drag(props.res, [e.clientX, e.clientY]);
-        }
+        props.onDrag?.();
+        rb.drag(local.res, [e.clientX, e.clientY]);
       }}
       onMouseEnter={() => hovered(true)}
-      onMouseLeave={() => hovered(false)}>
-      <Switch>
-        <Match when={props.res.file.type.startsWith("image")}>
-          <img class="select-none" draggable={false} src={props.res.src} />
-        </Match>
-        <Match when={props.res.file.type.startsWith("video")}>
-          <video class="select-none" width="100%">
-            <source src={props.res.src} />
-          </video>
-        </Match>
-      </Switch>
+      onMouseLeave={() => hovered(false)}
+      {...others}>
+      <MediaResource res={local.res} />
       <div class="absolute top-0 right-0">
-        <Show when={props.draggable && hovered()}>
-          <IconButton size="small" color="error" onClick={() => props.onRemove?.()}>
+        <Show when={local.onRemove && hovered()}>
+          <IconButton size="small" color="error" onClick={() => local.onRemove?.()}>
             <AiFillDelete />
           </IconButton>
         </Show>
@@ -42,21 +34,27 @@ export function Resource(props: {
   )
 }
 
-export function DraggingResource(props: {
-  res: Res;
+export const DraggableResource = styled(_DraggableResource)();
+
+function _MediaResource(props: {
+  res: Res
 }) {
+  const [local, others] = splitProps(props, ['res']);
   return (
-    <Box class="relative drop-shadow rounded-md overflow-hidden">
+    <Box class="relative drop-shadow rounded-md overflow-hidden"
+      {...others}>
       <Switch>
-        <Match when={props.res.file.type.startsWith("image")}>
-          <img width={300} class="select-none" draggable={false} src={props.res.src} />
+        <Match when={local.res.file.type.startsWith("image")}>
+          <img width={300} class="select-none" draggable={false} src={local.res.src} />
         </Match>
-        <Match when={props.res.file.type.startsWith("video")}>
+        <Match when={local.res.file.type.startsWith("video")}>
           <video width={300} class="select-none">
-            <source src={props.res.src} />
+            <source src={local.res.src} />
           </video>
         </Match>
       </Switch>
     </Box>
-  );
-}
+  )
+};
+
+export const MediaResource = styled(_MediaResource)();

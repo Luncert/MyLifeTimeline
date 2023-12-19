@@ -168,3 +168,13 @@ export function sequence(start: number, end: number, step: number = 1) {
 export function toCapital(v: string) {
   return v.charAt(0).toUpperCase() + v.substring(1);
 }
+
+export function removeElementsFromArray<T>(arr: T[], filter: (t: T) => boolean): T[] {
+  const idx: number[] = [];
+  arr.forEach((t, i) => {
+    if (filter(t)) {
+      idx.push(i);
+    }
+  });
+  return idx.map(i => arr.splice(i)[0]);
+}

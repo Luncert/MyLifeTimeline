@@ -1,10 +1,10 @@
 import { IconButton, Stack } from "@suid/material";
 import { FiPlus  } from 'solid-icons/fi';
-import { For, Match, Show, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
-import { createData, names, useCtx } from "./utils";
-import { DraggingResource, Resource } from "./Resource";
-import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegistry";
+import { createData, names, removeElementsFromArray } from "./utils";
+import { DraggableResource, MediaResource } from "./Resource";
+import { globalCustomEventRegistry } from "./EventRegistry";
 import { Tab, Tabs } from "./Tabs";
 import { Events } from "./TimelineCreator";
 
@@ -32,17 +32,10 @@ export function ResourceBrowser(){
 
   globalCustomEventRegistry.on(Events.DragTo, (evt) => {
     const res = evt.detail.res as Res;
-    let i = 0;
     const unused = unusedResources();
-    for (const f of unused) {
-      if (f.file.name === res.file.name) {
-        unused.splice(i);
-        unusedResources([...unused]);
-        usedResources([...usedResources(), res]);
-        break;
-      }
-      i++;
-    }
+    removeElementsFromArray(unused, (f) => f.file.name === res.file.name);
+    unusedResources([...unused]);
+    usedResources([...usedResources(), res]);
   });
 
   return (
@@ -86,13 +79,13 @@ export function ResourceBrowser(){
           <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
             selectedTab() === 'unused' ? "block" : "hidden")}>
             <Stack class="p-2 gap-2">
-              <For each={unusedResources()}>{res => <Resource res={res} draggable={true} />}</For>
+              <For each={unusedResources()}>{res => <DraggableResource res={res} />}</For>
             </Stack>
           </div>
           <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
             selectedTab() === 'used' ? "block" : "hidden")}>
             <Stack class="p-2 gap-2">
-              <For each={usedResources()}>{res => <Resource res={res} draggable={false} />}</For>
+              <For each={usedResources()}>{res => <MediaResource res={res} />}</For>
             </Stack>
           </div>
         </div>
