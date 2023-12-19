@@ -1,28 +1,29 @@
 import { Box, IconButton, styled } from "@suid/material";
-import { Match, Show, Switch, splitProps } from "solid-js";
-import { createData } from "./utils";
+import { JSX, Match, Show, Switch, splitProps } from "solid-js";
+import { createData, names } from "./utils";
 import { AiFillDelete } from 'solid-icons/ai';
 import { useDraggingResource } from "./TimelineCreator";
 
-export function _DraggableResource(props: {
+export function DraggableResource(props: {
   res: Res;
   onDrag?: () => void;
   onRemove?: () => void;
-}) {
-  const [local, others] = splitProps(props, ['res', 'onRemove']);
+} & JSX.HTMLAttributes<HTMLDivElement>) {
+  const [local, others] = splitProps(props, ['res', 'onRemove', "class"]);
   const rb = useDraggingResource();
   const hovered = createData(false);
 
   return (
-    <Box class="relative drop-shadow rounded-md overflow-hidden"
+    <div class={names("relative", local.class || "")}
       onMouseDown={(e) => {
+        const rect = e.target.getBoundingClientRect();
+        rb.drag(local.res, [e.clientX, e.clientY], [e.clientX - rect.x, e.clientY - rect.y]);
         props.onDrag?.();
-        rb.drag(local.res, [e.clientX, e.clientY]);
       }}
       onMouseEnter={() => hovered(true)}
       onMouseLeave={() => hovered(false)}
       {...others}>
-      <MediaResource res={local.res} />
+      <MediaResource class="rounded-none" res={local.res} />
       <div class="absolute top-0 right-0">
         <Show when={local.onRemove && hovered()}>
           <IconButton size="small" color="error" onClick={() => local.onRemove?.()}>
@@ -30,18 +31,16 @@ export function _DraggableResource(props: {
           </IconButton>
         </Show>
       </div>
-    </Box>
+    </div>
   )
 }
 
-export const DraggableResource = styled(_DraggableResource)();
-
-function _MediaResource(props: {
+export function MediaResource(props: {
   res: Res
-}) {
-  const [local, others] = splitProps(props, ['res']);
+} & JSX.HTMLAttributes<HTMLDivElement>) {
+  const [local, others] = splitProps(props, ['res', "class"]);
   return (
-    <Box class="relative drop-shadow rounded-md overflow-hidden"
+    <div class={names("relative drop-shadow rounded-md overflow-hidden", local.class || "")}
       {...others}>
       <Switch>
         <Match when={local.res.file.type.startsWith("image")}>
@@ -53,8 +52,6 @@ function _MediaResource(props: {
           </video>
         </Match>
       </Switch>
-    </Box>
+    </div>
   )
 };
-
-export const MediaResource = styled(_MediaResource)();

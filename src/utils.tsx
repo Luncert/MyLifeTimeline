@@ -176,5 +176,5 @@ export function removeElementsFromArray<T>(arr: T[], filter: (t: T) => boolean):
       idx.push(i);
     }
   });
-  return idx.map(i => arr.splice(i)[0]);
+  return idx.map(i => arr.splice(i, 1)[0]);
 }

@@ -11,14 +11,15 @@ type ResWithPos = {
 export default function ResourceCanvas(props: {
   showGrid?: boolean;
 }) {
-  const resources = createData<ResWithPos[]>([]);
   const resourceSet = new Set<string>();
+  const resources = createData<ResWithPos[]>([]);
   let container: HTMLDivElement;
 
   onMount(() => {
     globalCustomEventRegistry.on(Events.DragTo, (evt) => {
       const res = evt.detail.res as Res;
-      if (evt.detail.target !== container || resourceSet.has(res.file.name)) {
+      // evt.detail.target !== container || target is img
+      if (resourceSet.has(res.file.name)) {
         return;
       }
       resourceSet.add(res.file.name);
@@ -35,7 +36,7 @@ export default function ResourceCanvas(props: {
         "background-position": "-25px -25px",
       })}>
       <For each={resources()}>{res =>
-        <DraggableResource sx={{
+        <DraggableResource class="rounded-none" style={{
           position: "absolute",
           left: res.pos[0] + "px",
           top: res.pos[1] + "px",

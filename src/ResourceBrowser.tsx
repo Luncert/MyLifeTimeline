@@ -1,6 +1,6 @@
 import { IconButton, Stack } from "@suid/material";
 import { FiPlus  } from 'solid-icons/fi';
-import { For, Match, Switch } from "solid-js";
+import { For, Match, Switch, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createData, names, removeElementsFromArray } from "./utils";
 import { DraggableResource, MediaResource } from "./Resource";
@@ -30,20 +30,25 @@ export function ResourceBrowser(){
     }
   };
 
-  globalCustomEventRegistry.on(Events.DragTo, (evt) => {
-    const res = evt.detail.res as Res;
-    const unused = unusedResources();
-    removeElementsFromArray(unused, (f) => f.file.name === res.file.name);
-    unusedResources([...unused]);
-    usedResources([...usedResources(), res]);
+  onMount(() => {
+    globalCustomEventRegistry.on(Events.DragTo, (evt) => {
+      const res = evt.detail.res as Res;
+      const unused = unusedResources();
+      const removed = removeElementsFromArray(unused, (f) => f.file.name === res.file.name);
+      if (removed.length > 0) {
+        unusedResources([...unused]);
+        usedResources([...usedResources(), res]);
+      }
+    });
   });
 
   return (
     <>
       <div class={names("absolute top-[30px] w-[15%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
         collapsed() ? "-translate-x-full" : "translate-x-[0px]")}>
-        <div class="relative w-full h-full pt-10">
-          <div class={names("absolute flex flex-row-reverse shrink-0 w-full top-0 bg-white rounded-md transition-all z-10",
+        <div class="flex flex-col relative w-full h-full pt-10">
+          <div class={names("absolute flex flex-row-reverse shrink-0 w-full top-0 bg-white",
+            "rounded-md transition-all z-10",
             collapsed() ? "left-10" : "left-0")}>
             <IconButton color="primary"
               onClick={() => collapsed(!collapsed())}>

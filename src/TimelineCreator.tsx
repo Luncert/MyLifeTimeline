@@ -1,4 +1,4 @@
-import { Show, createContext } from "solid-js";
+import { Show, createContext, createMemo } from "solid-js";
 import { ResourceBrowser } from "./ResourceBrowser";
 import { createData, useCtx } from "./utils";
 import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegistry";
@@ -10,7 +10,7 @@ export const Events = {
 }
 
 interface DraggingResourceContextDef {
-  drag(res: Res, pos: Pos): void;
+  drag(res: Res, mousePos: Pos, mouseOffsetToElement: Pos): void;
 }
 
 const DraggingResourceContext = createContext<DraggingResourceContextDef>();
@@ -22,29 +22,38 @@ export function useDraggingResource() {
 export default function TimelineCreator() {
   const eventRegistry = createDomEventRegistry();
   const dragging = createData<Res | null>(null);
-  const draggingTo = createData<Pos>([0, 0]);
+  const mousePosition = createData<Pos>([0, 0]);
+  const mouseOffsetToElement = createData<Pos>([0, 0]);
+  const draggingTo = createMemo(() => {
+    const pos = mousePosition();
+    const offset = mouseOffsetToElement();
+    return [pos[0] - offset[0], pos[1] - offset[1]];
+  });
   
-  const onMouseDown = (res: Res, pos: Pos) => {
+  const onMouseDown = (res: Res, mousePos: Pos, mouseOffsetToElem: Pos) => {
     eventRegistry.on(window, 'mouseup', onMouseUp, false);
     eventRegistry.on(window, 'mousemove', onMouseMove, false);
 
     dragging(res);
-    draggingTo(pos);
+    mousePosition(mousePos);
+    mouseOffsetToElement(mouseOffsetToElem);
   };
 
   const onMouseMove = (evt: MouseEvent) => {
-    draggingTo([evt.clientX, evt.clientY]);
+    mousePosition([evt.clientX, evt.clientY]);
   };
 
   const onMouseUp = (evt: MouseEvent) => {
     const res = dragging();
     if (res) {
       dragging(null);
+      const offset = mouseOffsetToElement();
+      console.log(offset)
       globalCustomEventRegistry.dispatch(
         new CustomEvent(Events.DragTo, {
           detail: {
             res,
-            pos: [evt.clientX, evt.clientY],
+            pos: [evt.clientX - offset[0], evt.clientY - offset[1]],
             target: evt.target
           }
         }));
@@ -63,7 +72,7 @@ export default function TimelineCreator() {
           top: draggingTo()[1] + "px",
         }}>
           <Show when={dragging() !== null}>
-            <MediaResource res={dragging() as Res} />
+            <MediaResource class="border-2 border-sky-300" res={dragging() as Res} />
           </Show>
         </div>
         <ResourceCanvas />
