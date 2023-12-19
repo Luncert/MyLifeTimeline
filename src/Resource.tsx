@@ -1,20 +1,24 @@
 import { Box, IconButton } from "@suid/material";
 import { Match, Show, Switch } from "solid-js";
-import { useResourceBrowser } from "./ResourceBrowser";
 import { createData } from "./utils";
 import { AiFillDelete } from 'solid-icons/ai';
+import { useDraggingResource } from "./TimelineCreator";
 
 export function Resource(props: {
   res: Res;
   draggable?: boolean;
   onRemove?: () => void;
 }) {
-  const rb = useResourceBrowser();
+  const rb = useDraggingResource();
   const hovered = createData(false);
 
   return (
     <Box class="relative drop-shadow rounded-md overflow-hidden"
-      onMouseDown={(e) => rb.drag(props.res, [e.clientX, e.clientY])}
+      onMouseDown={(e) => {
+        if (props.draggable) {
+          rb.drag(props.res, [e.clientX, e.clientY]);
+        }
+      }}
       onMouseEnter={() => hovered(true)}
       onMouseLeave={() => hovered(false)}>
       <Switch>
