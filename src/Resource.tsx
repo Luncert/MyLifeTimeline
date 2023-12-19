@@ -16,6 +16,9 @@ export function DraggableResource(props: {
   return (
     <div class={names("relative", local.class || "")}
       onMouseDown={(e) => {
+        if (e.buttons !== 1) {
+          return;
+        }
         const rect = e.target.getBoundingClientRect();
         rb.drag(local.res, [e.clientX, e.clientY], [e.clientX - rect.x, e.clientY - rect.y]);
         props.onDrag?.();

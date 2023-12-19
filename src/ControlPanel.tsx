@@ -66,10 +66,10 @@ export function ControlPanel(){
     <div class={names("absolute top-[30px] w-[20%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
       collapsed() ? "-translate-x-full" : "translate-x-[0px]")}>
       <div class="flex flex-col relative w-full h-full">
-        <div class="h-10 leading-10 px-2 z-20 align-middle font-semibold">{views[selectedMenu()].name}</div>
-        <div class={names("absolute flex flex-row-reverse shrink-0 w-full top-0 bg-white",
+        <div class="h-10 leading-10 px-2 align-middle font-semibold text-zinc-600">{views[selectedMenu()].name}</div>
+        <div class={names("absolute flex flex-row-reverse shrink-0 top-0 bg-white",
           "rounded-md transition-all z-10",
-          collapsed() ? "left-10" : "left-0")}>
+          collapsed() ? "-right-10" : "right-0")}>
           <IconButton color="primary"
             onClick={() => collapsed(!collapsed())}>
             <Switch>
