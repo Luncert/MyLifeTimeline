@@ -5,7 +5,7 @@ import { createData, names, removeElementsFromArray } from "../utils";
 import { DraggableResource, MediaResource } from "../Resource";
 import { globalCustomEventRegistry } from "../EventRegistry";
 import { Tab, Tabs } from "../Tabs";
-import { Events } from "../TimelineCreator";
+import Events from "../Events";
 
 export function ResourceBrowser(){
   const resourceSet = new Set<string>();

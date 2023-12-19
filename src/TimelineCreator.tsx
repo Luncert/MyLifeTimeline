@@ -4,19 +4,16 @@ import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegist
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
 import { ControlPanel } from "./ControlPanel";
+import Events from "./Events";
 
-export const Events = {
-  DragTo: 'TimelineCreator:DragTo'
-}
-
-interface DraggingResourceContextDef {
+interface TimelineCreatorContextDef {
   drag(res: Res, mousePos: Pos, mouseOffsetToElement: Pos): void;
 }
 
-const DraggingResourceContext = createContext<DraggingResourceContextDef>();
+const TimelineCreatorContext = createContext<TimelineCreatorContextDef>();
 
-export function useDraggingResource() {
-  return useCtx<DraggingResourceContextDef>(DraggingResourceContext as any);
+export function useTimelineCreator() {
+  return useCtx<TimelineCreatorContextDef>(TimelineCreatorContext as any);
 }
 
 export default function TimelineCreator() {
@@ -63,8 +60,8 @@ export default function TimelineCreator() {
   };
 
   return (
-    <DraggingResourceContext.Provider value={{
-      drag: onMouseDown
+    <TimelineCreatorContext.Provider value={{
+      drag: onMouseDown,
     }}>
       <div class="relative w-full h-full">
         <div class="rounded-md overflow-hidden drop-shadow absolute z-10" style={{
@@ -78,6 +75,6 @@ export default function TimelineCreator() {
         <ResourceCanvas />
         <ControlPanel />
       </div>
-    </DraggingResourceContext.Provider>
+    </TimelineCreatorContext.Provider>
   )
 }

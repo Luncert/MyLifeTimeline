@@ -3,12 +3,12 @@ import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createData, names, removeElementsFromArray } from "./utils";
 import { globalCustomEventRegistry } from "./EventRegistry";
-import { Events } from "./TimelineCreator";
 import { ResourceBrowser } from "./control/ResourceBrowser";
 import { Dynamic } from "solid-js/web";
 import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';
 import { RiSystemSettings3Fill } from 'solid-icons/ri';
 import PageSettings from "./control/PageSettings";
+import Events from "./Events";
 
 interface ControlPanelView {
   name: string;

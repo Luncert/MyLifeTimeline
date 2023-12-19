@@ -1,8 +1,8 @@
 import { For, onMount } from "solid-js";
 import { conditionalValue, createData, removeElementsFromArray } from "./utils";
 import { globalCustomEventRegistry } from "./EventRegistry";
-import { Events } from "./TimelineCreator";
 import { DraggableResource } from "./Resource";
+import Events from "./Events";
 
 type ResWithPos = {
   pos: Pos;
@@ -13,6 +13,7 @@ export default function ResourceCanvas(props: {
 }) {
   const resourceSet = new Set<string>();
   const resources = createData<ResWithPos[]>([]);
+  const background = createData<Res | null>(null);
   let container: HTMLDivElement;
 
   onMount(() => {
@@ -25,16 +26,25 @@ export default function ResourceCanvas(props: {
       resourceSet.add(res.file.name);
       resources([...resources(), {...res, pos: evt.detail.pos}]);
     });
+    globalCustomEventRegistry.on(Events.SetBackground, (evt) => {
+      const res = evt.detail as Res;
+      background(res);
+    })
   });
 
   return (
     <div ref={el => container = el} class="w-full h-full"
-      style={conditionalValue(props.showGrid, {
-        "background-color": "white",
-        "background-image": "radial-gradient(#e4e4e7 3px, #fafafa 1px)",
-        "background-size": "50px 50px",
-        "background-position": "-25px -25px",
-      })}>
+      style={Object.assign({},
+        conditionalValue(props.showGrid, {
+          "background-color": "white",
+          "background-image": "radial-gradient(#e4e4e7 3px, #fafafa 1px)",
+          "background-size": "50px 50px",
+          "background-position": "-25px -25px",
+        }),
+        conditionalValue(background(), {
+          "background-image": `url(${background()?.src})`,
+          "background-size": "cover"
+        }))}>
       <For each={resources()}>{res =>
         <DraggableResource class="rounded-none" style={{
           position: "absolute",

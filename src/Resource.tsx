@@ -1,8 +1,11 @@
-import { IconButton } from "@suid/material";
+import { IconButton, Menu, MenuItem, MenuList, Paper, ThemeProvider, Typography } from "@suid/material";
 import { JSX, Match, Show, Switch, splitProps } from "solid-js";
 import { createData, names } from "./utils";
 import { AiFillDelete } from 'solid-icons/ai';
-import { useDraggingResource } from "./TimelineCreator";
+import { useTimelineCreator } from "./TimelineCreator";
+import { useBackdrop } from "./BackdropWrapper";
+import { globalCustomEventRegistry } from "./EventRegistry";
+import Events from "./Events";
 
 export function DraggableResource(props: {
   res: Res;
@@ -11,7 +14,8 @@ export function DraggableResource(props: {
   elemWidth?: string | number;
 } & JSX.HTMLAttributes<HTMLDivElement>) {
   const [local, others] = splitProps(props, ['res', 'onRemove', "class", "elemWidth"]);
-  const rb = useDraggingResource();
+  const creator = useTimelineCreator();
+  const backdrop = useBackdrop();
   const hovered = createData(false);
 
   return (
@@ -21,12 +25,18 @@ export function DraggableResource(props: {
           return;
         }
         const rect = e.target.getBoundingClientRect();
-        rb.drag(local.res, [e.clientX, e.clientY], [e.clientX - rect.x, e.clientY - rect.y]);
+        creator.drag(local.res, [e.clientX, e.clientY], [e.clientX - rect.x, e.clientY - rect.y]);
         props.onDrag?.();
       }}
       onMouseEnter={() => hovered(true)}
       onMouseLeave={() => hovered(false)}
-      onContextMenu={() => {}}
+      onContextMenu={(evt) => {
+        backdrop.show({
+          elem: createRightClickContext(props.res),
+          elemPos: [evt.clientX, evt.clientY],
+        });
+        evt.preventDefault();
+      }}
       {...others}>
       <MediaResource class="rounded-none" res={local.res} elemWidth={local.elemWidth} />
       <div class="absolute top-0 right-0">
@@ -38,6 +48,24 @@ export function DraggableResource(props: {
       </div>
     </div>
   )
+}
+
+function createRightClickContext(res: Res) {
+  return (() => {
+    const backdrop = useBackdrop();
+    return (
+      <Paper class="min-w-[100px]">
+        <MenuList>
+          <MenuItem onClick={() => {
+            backdrop.hide();
+            globalCustomEventRegistry.dispatch(new CustomEvent(Events.SetBackground, { detail: res }))
+          }}>
+            <Typography>Set as background</Typography>
+          </MenuItem>
+        </MenuList>
+      </Paper>
+    );
+  })
 }
 
 export function MediaResource(props: {

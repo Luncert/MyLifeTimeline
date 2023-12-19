@@ -47,3 +47,6 @@ html, body, #root {
   background-color: rgb(204, 206, 207);
 }
 
+.portal-container div {
+  position: relative;
+}
