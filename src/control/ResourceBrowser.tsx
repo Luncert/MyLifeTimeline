@@ -1,11 +1,11 @@
 import { IconButton, Stack } from "@suid/material";
 import { FiPlus  } from 'solid-icons/fi';
 import { For, onMount } from "solid-js";
-import { createData, names, removeElementsFromArray } from "./utils";
-import { DraggableResource, MediaResource } from "./Resource";
-import { globalCustomEventRegistry } from "./EventRegistry";
-import { Tab, Tabs } from "./Tabs";
-import { Events } from "./TimelineCreator";
+import { createData, names, removeElementsFromArray } from "../utils";
+import { DraggableResource, MediaResource } from "../Resource";
+import { globalCustomEventRegistry } from "../EventRegistry";
+import { Tab, Tabs } from "../Tabs";
+import { Events } from "../TimelineCreator";
 
 export function ResourceBrowser(){
   const resourceSet = new Set<string>();

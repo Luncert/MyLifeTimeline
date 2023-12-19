@@ -1,13 +1,14 @@
-import { Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@suid/material";
+import { Divider, IconButton, ToggleButton, ToggleButtonGroup, Typography } from "@suid/material";
 import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createData, names, removeElementsFromArray } from "./utils";
 import { globalCustomEventRegistry } from "./EventRegistry";
 import { Events } from "./TimelineCreator";
-import { ResourceBrowser } from "./ResourceBrowser";
+import { ResourceBrowser } from "./control/ResourceBrowser";
 import { Dynamic } from "solid-js/web";
 import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';
 import { RiSystemSettings3Fill } from 'solid-icons/ri';
+import PageSettings from "./control/PageSettings";
 
 interface ControlPanelView {
   name: string;
@@ -15,20 +16,25 @@ interface ControlPanelView {
   view: ValidComponent;
 }
 
-const views: ControlPanelView[] = [
-  {
+const views: {[k: string]: ControlPanelView} = {
+  resourceManager: {
     name: "Resource Manager",
     icon: OcFiledirectoryopenfill2,
     view: ResourceBrowser
+  },
+  pageSettings: {
+    name: "Page Settings",
+    icon: RiSystemSettings3Fill,
+    view: PageSettings
   }
-];
+};
 
 export function ControlPanel(){
   const resourceSet = new Set<string>();
   const collapsed = createData(false);
   const unusedResources = createData<Res[]>([]);
   const usedResources = createData<Res[]>([]);
-  const selectedMenu = createData<string>(views[0].name);
+  const selectedMenu = createData<string>("resourceManager");
   
   const onImport = (inputElem: HTMLInputElement) => {
     if (inputElem.files) {
@@ -59,8 +65,8 @@ export function ControlPanel(){
   return (
     <div class={names("absolute top-[30px] w-[20%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
       collapsed() ? "-translate-x-full" : "translate-x-[0px]")}>
-      <div class="flex flex-col relative w-full h-full pt-10">
-        {/* panel control */}
+      <div class="flex flex-col relative w-full h-full">
+        <div class="h-10 leading-10 px-2 z-20 align-middle font-semibold">{views[selectedMenu()].name}</div>
         <div class={names("absolute flex flex-row-reverse shrink-0 w-full top-0 bg-white",
           "rounded-md transition-all z-10",
           collapsed() ? "left-10" : "left-0")}>
@@ -86,9 +92,9 @@ export function ControlPanel(){
                 border: "none"
               }
             }}>
-            <For each={views}>{view => (
-              <ToggleButton value={view.name}>
-                <Dynamic component={view.icon} />
+            <For each={Object.keys(views)}>{viewName => (
+              <ToggleButton value={viewName}>
+                <Dynamic component={views[viewName].icon} />
               </ToggleButton>
             )}
             </For>
@@ -96,9 +102,9 @@ export function ControlPanel(){
           <Divider orientation="vertical" />
           <div class="w-full h-full shrink">
             <Switch>
-              <For each={views}>{view => (
-                <Match when={selectedMenu() === view.name}>
-                  <Dynamic component={view.view} />
+              <For each={Object.keys(views)}>{viewName => (
+                <Match when={selectedMenu() === viewName}>
+                  <Dynamic component={views[viewName].view} />
                 </Match>
               )}
               </For>
