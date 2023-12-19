@@ -1,9 +1,9 @@
 import { Show, createContext, createMemo } from "solid-js";
-import { ResourceBrowser } from "./ResourceBrowser";
 import { createData, useCtx } from "./utils";
 import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegistry";
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
+import { ControlPanel } from "./ControlPanel";
 
 export const Events = {
   DragTo: 'TimelineCreator:DragTo'
@@ -76,7 +76,7 @@ export default function TimelineCreator() {
           </Show>
         </div>
         <ResourceCanvas />
-        <ResourceBrowser />
+        <ControlPanel />
       </div>
     </DraggingResourceContext.Provider>
   )
