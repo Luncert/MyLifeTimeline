@@ -42,7 +42,7 @@ export function ResourceBrowser(){
   });
 
   return (
-    <div class="w-full h-full shrink">
+    <div class="w-full h-full">
       <Tabs value={selectedTab()} onChangeTab={selectedTab}>
         <Tab label="unused">Unused</Tab>
         <Tab label="used">Used</Tab>
@@ -66,13 +66,13 @@ export function ResourceBrowser(){
       <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
         selectedTab() === 'unused' ? "block" : "hidden")}>
         <Stack class="p-2 gap-2">
-          <For each={unusedResources()}>{res => <DraggableResource res={res} />}</For>
+          <For each={unusedResources()}>{res => <DraggableResource res={res} elemWidth="100%" />}</For>
         </Stack>
       </div>
       <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
         selectedTab() === 'used' ? "block" : "hidden")}>
         <Stack class="p-2 gap-2">
-          <For each={usedResources()}>{res => <MediaResource res={res} />}</For>
+          <For each={usedResources()}>{res => <MediaResource res={res} elemWidth="100%" />}</For>
         </Stack>
       </div>
     </div>

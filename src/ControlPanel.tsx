@@ -101,14 +101,12 @@ export function ControlPanel(){
           </ToggleButtonGroup>
           <Divider orientation="vertical" />
           <div class="w-full h-full shrink">
-            <Switch>
-              <For each={Object.keys(views)}>{viewName => (
-                <Match when={selectedMenu() === viewName}>
-                  <Dynamic component={views[viewName].view} />
-                </Match>
-              )}
-              </For>
-            </Switch>
+            <For each={Object.keys(views)}>{viewName => (
+              <div class={selectedMenu() === viewName ? "block" : "hidden"}>
+                <Dynamic component={views[viewName].view} />
+              </div>
+            )}
+            </For>
           </div>
         </div>
       </div>
