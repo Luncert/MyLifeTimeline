@@ -2,13 +2,13 @@ import { IconButton, Stack } from "@suid/material";
 import { FiPlus  } from 'solid-icons/fi';
 import { For, Match, Show, Switch, createContext, createMemo, createSignal, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
-import { createData, names, useCtx } from "./utils";
+import { conditionalString, createData, names, useCtx } from "./utils";
 import { DraggingResource, Resource } from "./Resource";
 import { createDomEventRegistry } from "./EventRegistry";
 import { Tab, Tabs } from "./Tabs";
 
 interface ResourceBrowserContextDef {
-  drag(file: File, pos: Pos): void;
+  drag(res: Res, pos: Pos): void;
 }
 
 const ResourceBrowserContext = createContext<ResourceBrowserContextDef>();
@@ -20,43 +20,33 @@ export function useResourceBrowser() {
 export function ResourceBrowser(){
   const resourceSet = new Set<string>();
   const collapsed = createData(false);
-  const unusedResources = createData<File[]>([]);
-  const usedResources = createData<File[]>([]);
+  const unusedResources = createData<Res[]>([]);
+  const usedResources = createData<Res[]>([]);
   const selectedTab = createData<string>("unused");
   
   const eventRegistry = createDomEventRegistry();
-  const dragging = createData<File | null>(null);
+  const dragging = createData<Res | null>(null);
   const draggingTo = createData<Pos>([0, 0]);
-
-  const filteredResources = createMemo(() => {
-    switch (selectedTab()) {
-      case "used":
-        return usedResources();
-      case "ununsed":
-      default:
-        return unusedResources();
-    }
-  });
   
   const onImport = (inputElem: HTMLInputElement) => {
     if (inputElem.files) {
-      const files: File[] = [];
+      const arr: Res[] = [];
       for (let file of inputElem.files) {
         if (resourceSet.has(file.name)) {
           continue;
         }
-        files.push(file);
+        arr.push({file, src: URL.createObjectURL(file)});
         resourceSet.add(file.name);
       }
-      unusedResources([...unusedResources(), ...files]);
+      unusedResources([...unusedResources(), ...arr]);
     }
   };
   
-  const onMouseDown = (file: File, pos: Pos) => {
+  const onMouseDown = (res: Res, pos: Pos) => {
     eventRegistry.on(window, 'mouseup', onMouseUp, false);
     eventRegistry.on(window, 'mousemove', onMouseMove, false);
 
-    dragging(file);
+    dragging(res);
     draggingTo(pos);
   };
 
@@ -71,7 +61,7 @@ export function ResourceBrowser(){
       let i = 0;
       const unused = unusedResources();
       for (const f of unused) {
-        if (f.name === res.name) {
+        if (f.file.name === res.file.name) {
           unused.splice(i);
           unusedResources([...unused]);
           usedResources([...usedResources(), res]);
@@ -91,7 +81,7 @@ export function ResourceBrowser(){
         top: draggingTo()[1] + "px",
       }}>
         <Show when={dragging() !== null}>
-          <DraggingResource file={dragging() as File} />
+          <DraggingResource res={dragging() as Res} />
         </Show>
       </div>
       <div class={names("absolute top-[30px] w-[15%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
@@ -133,9 +123,20 @@ export function ResourceBrowser(){
           <ResourceBrowserContext.Provider value={{
             drag: onMouseDown
           }}>
-            <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar")}>
+            <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
+              selectedTab() === 'unused' ? "block" : "hidden")}>
               <Stack class="p-2 gap-2">
-                <For each={filteredResources()}>{file => <Resource file={file} />}</For>
+                <For each={unusedResources()}>{res => <Resource res={res} draggable={true} />}</For>
+              </Stack>
+            </div>
+          </ResourceBrowserContext.Provider>
+          <ResourceBrowserContext.Provider value={{
+            drag: onMouseDown
+          }}>
+            <div dir="rtl" class={names("relative w-full h-full shrink overflow-y-auto custom-scrollbar",
+              selectedTab() === 'used' ? "block" : "hidden")}>
+              <Stack class="p-2 gap-2">
+                <For each={usedResources()}>{res => <Resource res={res} draggable={false} />}</For>
               </Stack>
             </div>
           </ResourceBrowserContext.Provider>

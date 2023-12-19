@@ -10,6 +10,11 @@ declare global {
   
   type Data<T> = (v?: T) => T;
 
+  interface Res {
+    file: File;
+    src: string;
+  }
+
   interface Box {
     x: number;
     y: number;

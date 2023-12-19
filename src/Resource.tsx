@@ -5,7 +5,7 @@ import { createData } from "./utils";
 import { AiFillDelete } from 'solid-icons/ai';
 
 export function Resource(props: {
-  file: File;
+  res: Res;
   draggable?: boolean;
   onRemove?: () => void;
 }) {
@@ -14,16 +14,16 @@ export function Resource(props: {
 
   return (
     <Box class="relative drop-shadow rounded-md overflow-hidden"
-      onMouseDown={(e) => rb.drag(props.file, [e.clientX, e.clientY])}
+      onMouseDown={(e) => rb.drag(props.res, [e.clientX, e.clientY])}
       onMouseEnter={() => hovered(true)}
       onMouseLeave={() => hovered(false)}>
       <Switch>
-        <Match when={props.file.type.startsWith("image")}>
-          <img class="select-none" draggable={false} src={URL.createObjectURL(props.file)} />
+        <Match when={props.res.file.type.startsWith("image")}>
+          <img class="select-none" draggable={false} src={props.res.src} />
         </Match>
-        <Match when={props.file.type.startsWith("video")}>
+        <Match when={props.res.file.type.startsWith("video")}>
           <video class="select-none" width="100%">
-            <source src={URL.createObjectURL(props.file)} />
+            <source src={props.res.src} />
           </video>
         </Match>
       </Switch>
@@ -39,17 +39,17 @@ export function Resource(props: {
 }
 
 export function DraggingResource(props: {
-  file: File;
+  res: Res;
 }) {
   return (
     <Box class="relative drop-shadow rounded-md overflow-hidden">
       <Switch>
-        <Match when={props.file.type.startsWith("image")}>
-          <img width={300} class="select-none" draggable={false} src={URL.createObjectURL(props.file)} />
+        <Match when={props.res.file.type.startsWith("image")}>
+          <img width={300} class="select-none" draggable={false} src={props.res.src} />
         </Match>
-        <Match when={props.file.type.startsWith("video")}>
+        <Match when={props.res.file.type.startsWith("video")}>
           <video width={300} class="select-none">
-            <source src={URL.createObjectURL(props.file)} />
+            <source src={props.res.src} />
           </video>
         </Match>
       </Switch>
