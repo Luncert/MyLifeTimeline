@@ -3,7 +3,7 @@ import { FiPlus  } from 'solid-icons/fi';
 import { For, onMount } from "solid-js";
 import { createBucket, names, removeElementsFromArray } from "../mgrui/lib/components/utils";
 import { DraggableResource, MediaResource } from "../Resource";
-import { globalCustomEventRegistry } from "../EventRegistry";
+import { globalCustomEventRegistry } from "../mgrui/lib/components/EventRegistry";
 import { Tab, Tabs } from "../mgrui/lib/components/navigation/Tabs";
 import Events from "../Events";
 

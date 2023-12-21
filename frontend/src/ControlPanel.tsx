@@ -2,7 +2,7 @@ import { Divider, IconButton, ToggleButton, ToggleButtonGroup, Typography } from
 import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createBucket, names, removeElementsFromArray } from "./mgrui/lib/components/utils";
-import { globalCustomEventRegistry } from "./EventRegistry";
+import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import { ResourceBrowser } from "./control/ResourceBrowser";
 import { Dynamic } from "solid-js/web";
 import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';

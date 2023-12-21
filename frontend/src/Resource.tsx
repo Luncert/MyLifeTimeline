@@ -4,7 +4,7 @@ import { createBucket, names } from "./mgrui/lib/components/utils";
 import { AiFillDelete } from 'solid-icons/ai';
 import { useTimelineCreator } from "./TimelineCreator";
 import { useBackdrop } from "./mgrui/lib/components/BackdropWrapper";
-import { globalCustomEventRegistry } from "./EventRegistry";
+import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import Events from "./Events";
 
 export function DraggableResource(props: {

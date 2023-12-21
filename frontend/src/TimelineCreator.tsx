@@ -1,6 +1,6 @@
 import { Show, createContext, createMemo } from "solid-js";
 import { createBucket, useCtx } from "./mgrui/lib/components/utils";
-import { createDomEventRegistry, globalCustomEventRegistry } from "./EventRegistry";
+import { createDomEventRegistry, globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
 import { ControlPanel } from "./ControlPanel";
