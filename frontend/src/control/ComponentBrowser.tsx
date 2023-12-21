@@ -6,15 +6,7 @@ import { IoText } from 'solid-icons/io';
 import { FaSolidPenNib } from 'solid-icons/fa';
 import { globalCustomEventRegistry } from "../mgrui/lib/components/EventRegistry";
 import Events from "../Events";
-import TextComponent from "./component/TextComponent";
-
-function TextComponentConfig() {
-  return (
-    <div>
-      text component config
-    </div>
-  )
-}
+import createTextComponent from "./component/TextComponent";
 
 export interface BasicComponentProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
@@ -22,8 +14,7 @@ export interface BasicComponentProps extends JSX.HTMLAttributes<HTMLDivElement> 
 interface Component {
   name: string;
   icon: ValidComponent;
-  view: ValidComponent;
-  configView: ValidComponent;
+  provider: () => [ValidComponent, JSX.Element];
 }
 
 interface ComponentInstance {
@@ -34,14 +25,12 @@ const components: {[k: string]: Component} = {
   text: {
     name: "Text",
     icon: IoText,
-    view: TextComponent,
-    configView: TextComponentConfig
+    provider: createTextComponent,
   },
   pen: {
     name: "Pen",
     icon: FaSolidPenNib,
-    view: TextComponent,
-    configView: TextComponentConfig
+    provider: createTextComponent,
   }
 }
 

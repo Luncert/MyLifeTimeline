@@ -1,3 +1,4 @@
+import { JSX, ValidComponent } from "solid-js";
 import { StoreBucket, createBucket, createStoreBucket } from "../../mgrui/lib/components/utils";
 import { BasicComponentProps } from "../ComponentBrowser";
 import InteractElement from "./InteractElement";
@@ -33,7 +34,7 @@ function Config(props: TextComponentProps) {
   )
 }
 
-function createTextComponent() {
+export default function createTextComponent(): [ValidComponent, JSX.Element] {
   const store = createStoreBucket<TextComponentAttributes>({
     content: "Text",
     font: "",
@@ -42,6 +43,6 @@ function createTextComponent() {
   });
   return [
     (props: any) => <TextComponent attrs={store} {...props} />,
-    () => <Config attrs={store} />
+    <Config attrs={store} />
   ]
 }
