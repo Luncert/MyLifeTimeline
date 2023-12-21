@@ -1,28 +1,50 @@
-import { Match, Switch, splitProps } from "solid-js";
-import ResizeableElement from "./ResizeableElement";
+import { Match, Switch  } from "solid-js";
 import { createBucket } from "../../mgrui/lib/components/utils";
 import { Input, TextField, Typography } from "@suid/material";
 import { BasicComponentProps } from "../ComponentBrowser";
+import InteractElement from "./InteractElement";
 
-export default function TextComponent(props: {
-} & BasicComponentProps) {
-  const editting = createBucket(false);
+export default function TextComponent(props: BasicComponentProps) {
   const content = createBucket("Text Component");
-  const [local, others] = splitProps(props, []);
-
+  const editing = createBucket(false);
   return (
-    <ResizeableElement {...others}>
-      <Switch>
-        <Match when={editting()}>
-          {/* <TextField value={content()} onChange={(evt, v) => content(v)} /> */}
-          <Input value={content()}
-            onBlur={() => editting(false)}
-            onChange={(evt, v) => content(v)} />
-        </Match>
-        <Match when={!editting()}>
-          <Typography onClick={() => editting(true)}>{content()}</Typography>
-        </Match>
-      </Switch>
-    </ResizeableElement>
+    <InteractElement class="p-2 inline-block"
+      draggable resizeable
+      onFocusOrHover={editing}
+      contentEditable={editing()}>
+      {content()}
+    </InteractElement>
   )
 }
+
+
+// <Switch>
+// <Match when={props.focused}>
+//   {/* <TextField value={content()}
+//     autoFocus
+//     onChange={(evt, v) => content(v)}
+//     multiline
+//     sx={{
+//       width: "100%",
+//       height: "100%"
+//     }} /> */}
+//   <pre  onChange={(evt) => content(evt.target.textContent || "")}>
+//     {content()}
+//   </pre>
+// </Match>
+// <Match when={!props.focused}>
+//   <pre>{content()}</pre>
+//   {/* <Input value={content()}
+//     multiline
+//     readOnly
+//     sx={{
+//       width: "100%",
+//       outline: "none",
+//       border: "none",
+//       "& > textarea:focus": {
+//         outline: "none",
+//         border: "none",
+//       }
+//     }} /> */}
+// </Match>
+// </Switch>

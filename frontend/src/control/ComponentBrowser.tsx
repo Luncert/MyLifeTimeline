@@ -7,6 +7,8 @@ import { FaSolidPenNib } from 'solid-icons/fa';
 import { globalCustomEventRegistry } from "../mgrui/lib/components/EventRegistry";
 import Events from "../Events";
 import TextComponent from "./component/TextComponent";
+import interact from "interactjs";
+import InteractElement from "./component/InteractElement";
 
 function TextComponentConfig() {
   return (

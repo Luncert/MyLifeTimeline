@@ -25,6 +25,7 @@
   "dependencies": {
     "@suid/material": "^0.15.1",
     "@types/uuid": "^9.0.7",
+    "interactjs": "^1.10.26",
     "sass": "^1.69.5",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.7",
