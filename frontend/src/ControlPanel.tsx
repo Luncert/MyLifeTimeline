@@ -1,4 +1,4 @@
-import { Divider, IconButton, ToggleButton, ToggleButtonGroup, Typography } from "@suid/material";
+import { Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@suid/material";
 import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createBucket, names, removeElementsFromArray } from "./mgrui/lib/components/utils";
@@ -9,6 +9,8 @@ import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';
 import { RiSystemSettings3Fill } from 'solid-icons/ri';
 import PageSettings from "./control/PageSettings";
 import Events from "./Events";
+import { BiSolidComponent } from "solid-icons/bi";
+import ComponentBrowser from "./control/ComponentBrowser";
 
 interface ControlPanelView {
   name: string;
@@ -22,34 +24,24 @@ const views: {[k: string]: ControlPanelView} = {
     icon: OcFiledirectoryopenfill2,
     view: ResourceBrowser
   },
+  componentBrowser: {
+    name: "Components",
+    icon: BiSolidComponent,
+    view: ComponentBrowser
+  },
   pageSettings: {
     name: "Page Settings",
     icon: RiSystemSettings3Fill,
     view: PageSettings
-  }
+  },
 };
 
 export function ControlPanel(){
-  const resourceSet = new Set<string>();
   const collapsed = createBucket(false);
   const unusedResources = createBucket<Res[]>([]);
   const usedResources = createBucket<Res[]>([]);
-  const selectedMenu = createBucket<string>("resourceManager");
+  const selectedMenu = createBucket<string>("componentBrowser");
   
-  const onImport = (inputElem: HTMLInputElement) => {
-    if (inputElem.files) {
-      const arr: Res[] = [];
-      for (let file of inputElem.files) {
-        if (resourceSet.has(file.name)) {
-          continue;
-        }
-        arr.push({file, src: URL.createObjectURL(file)});
-        resourceSet.add(file.name);
-      }
-      unusedResources([...unusedResources(), ...arr]);
-    }
-  };
-
   onMount(() => {
     globalCustomEventRegistry.on(Events.DragTo, (evt) => {
       const res = evt.detail.res as Res;

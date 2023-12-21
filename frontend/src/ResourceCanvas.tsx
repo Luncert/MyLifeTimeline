@@ -1,18 +1,26 @@
-import { For, onMount } from "solid-js";
+import { For, ValidComponent, onMount } from "solid-js";
 import { conditionalValue, createBucket, removeElementsFromArray } from "./mgrui/lib/components/utils";
 import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import { DraggableResource } from "./Resource";
 import Events from "./Events";
+import { Dynamic } from "solid-js/web";
 
 type ResWithPos = {
   pos: Pos;
 } & Res;
 
+type ComponentWithPos = {
+  pos: Pos;
+  component: ValidComponent;
+};
+
+type CanvasItem = ResWithPos | ComponentWithPos;
+
 export default function ResourceCanvas(props: {
   showGrid?: boolean;
 }) {
   const resourceSet = new Set<string>();
-  const resources = createBucket<ResWithPos[]>([]);
+  const items = createBucket<CanvasItem[]>([]);
   const background = createBucket<Res | null>(null);
   let container: HTMLDivElement;
 
@@ -24,12 +32,16 @@ export default function ResourceCanvas(props: {
         return;
       }
       resourceSet.add(res.file.name);
-      resources([...resources(), {...res, pos: evt.detail.pos}]);
+      items([...items(), {...res, pos: evt.detail.pos}]);
     });
     globalCustomEventRegistry.on(Events.SetBackground, (evt) => {
       const res = evt.detail as Res;
       background(res);
-    })
+    });
+    globalCustomEventRegistry.on(Events.AddComponent, (evt) => {
+      const component = evt.detail as ValidComponent;
+      items([...items(), { pos: [300, 300], component }]);
+    });
   });
 
   return (
@@ -45,18 +57,31 @@ export default function ResourceCanvas(props: {
           "background-image": `url(${background()?.src})`,
           "background-size": "cover"
         }))}>
-      <For each={resources()}>{res =>
-        <DraggableResource class="rounded-none" style={{
-          position: "absolute",
-          left: res.pos[0] + "px",
-          top: res.pos[1] + "px",
-        }} res={res} onDrag={() => {
-          resourceSet.delete(res.file.name);
-          const r = resources();
-          removeElementsFromArray(r, (f) => f.file.name === res.file.name);
-          resources([...r]);
-        }}/>}
-      </For>
+      <For each={items()}>{item => {
+        if (typeof(item) === "object" && "file" in item) {
+          const i = item as ResWithPos;
+          return (
+            <DraggableResource class="rounded-none" style={{
+              position: "absolute",
+              left: i.pos[0] + "px",
+              top: i.pos[1] + "px",
+            }} res={i} onDrag={() => {
+              resourceSet.delete(i.file.name);
+              const r = items();
+              removeElementsFromArray(r, (f) => typeof(f) === "object" && "file" in f && f.file.name === i.file.name);
+              items([...r]);
+            }}/>
+          )
+        } else {
+          const i = item as ComponentWithPos;
+          return (
+            <Dynamic component={i.component} style={{
+              left: i.pos[0] + "px",
+              top: i.pos[1] + "px"
+            }} />
+          )
+        }
+      }}</For>
     </div>
   )
 }

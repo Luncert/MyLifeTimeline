@@ -1,5 +1,6 @@
 
 export default {
   DragTo: "TimelineCreator:DragTo",
-  SetBackground: "TimelineCreator:SetBackground"
+  SetBackground: "TimelineCreator:SetBackground",
+  AddComponent: "TimeilneCreator:AddComponent"
 }

@@ -9,7 +9,6 @@ import Events from "../Events";
 
 export function ResourceBrowser(){
   const resourceSet = new Set<string>();
-  const collapsed = createBucket(false);
   const unusedResources = createBucket<Res[]>([]);
   const usedResources = createBucket<Res[]>([]);
   const selectedTab = createBucket<string>("unused");
