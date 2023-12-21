@@ -4,11 +4,13 @@ import { conditionalString, createBucket, names } from "../../mgrui/lib/componen
 import { createDomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 
 export default function InteractElement(props: {
+  initialPos?: Pos;
   draggable?: boolean;
   resizeable?: boolean;
   onFocusOrHover?: Consumer<boolean>;
 } & JSX.HTMLAttributes<HTMLDivElement>) {
-  const [local, others] = splitProps(props, ["class", "draggable", "resizeable", "onFocusOrHover", "children"]);
+  const [local, others] = splitProps(props, ["initialPos", "class", "draggable", "resizeable", "onFocusOrHover", "children"]);
+  const initialPos = local.initialPos;
   let ref: HTMLDivElement
   const focused = createBucket(false);
   const hovered = createBucket(false);
@@ -63,6 +65,8 @@ export default function InteractElement(props: {
       }
       focused(false);
     }, true);
+
+    ref.style.transform = `translate(${initialPos?.[0]}px, ${initialPos?.[1]}px)`;
   });
 
 
@@ -74,7 +78,9 @@ export default function InteractElement(props: {
       onMouseEnter={() => hovered(true)}
       onMouseLeave={() => hovered(false)}
       onMouseDown={() => focused(true)}
-      {...others}>
+      {...others}
+      data-x={initialPos?.[0]}
+      data-y={initialPos?.[1]}>
       {local.children}
     </div>
   )
@@ -101,6 +107,7 @@ function resizeListener(event: any) {
 
 function dragMoveListener(event: any) {
   var target = event.target
+
   // keep the dragged position in the data-x/data-y attributes
   var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
   var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy

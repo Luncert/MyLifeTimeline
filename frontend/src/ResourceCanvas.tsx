@@ -75,10 +75,7 @@ export default function ResourceCanvas(props: {
         } else {
           const i = item as ComponentWithPos;
           return (
-            <Dynamic component={i.component} style={{
-              left: i.pos[0] + "px",
-              top: i.pos[1] + "px"
-            }} />
+            <Dynamic component={i.component} initialPos={i.pos} />
           )
         }
       }}</For>
