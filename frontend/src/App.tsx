@@ -1,4 +1,4 @@
-import { BackdropWrapper } from "./BackdropWrapper";
+import { BackdropWrapper } from "./mgrui/lib/components/BackdropWrapper";
 import TimelineCreator from "./TimelineCreator";
 
 export default function App() {

@@ -1,18 +1,18 @@
 import { IconButton, Stack } from "@suid/material";
 import { FiPlus  } from 'solid-icons/fi';
 import { For, onMount } from "solid-js";
-import { createData, names, removeElementsFromArray } from "../utils";
+import { createBucket, names, removeElementsFromArray } from "../mgrui/lib/components/utils";
 import { DraggableResource, MediaResource } from "../Resource";
 import { globalCustomEventRegistry } from "../EventRegistry";
-import { Tab, Tabs } from "../Tabs";
+import { Tab, Tabs } from "../mgrui/lib/components/navigation/Tabs";
 import Events from "../Events";
 
 export function ResourceBrowser(){
   const resourceSet = new Set<string>();
-  const collapsed = createData(false);
-  const unusedResources = createData<Res[]>([]);
-  const usedResources = createData<Res[]>([]);
-  const selectedTab = createData<string>("unused");
+  const collapsed = createBucket(false);
+  const unusedResources = createBucket<Res[]>([]);
+  const usedResources = createBucket<Res[]>([]);
+  const selectedTab = createBucket<string>("unused");
   
   
   const onImport = (inputElem: HTMLInputElement) => {

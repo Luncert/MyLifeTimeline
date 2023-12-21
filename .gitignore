@@ -1,2 +1,7 @@
-node_modules
-dist
+manifest.yaml
+.idea/
+*/.idea/
+indexing
+target/
+*/target
+deploy.sh

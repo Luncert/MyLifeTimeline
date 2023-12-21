@@ -1,7 +1,7 @@
 import { Divider, IconButton, ToggleButton, ToggleButtonGroup, Typography } from "@suid/material";
 import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
-import { createData, names, removeElementsFromArray } from "./utils";
+import { createBucket, names, removeElementsFromArray } from "./mgrui/lib/components/utils";
 import { globalCustomEventRegistry } from "./EventRegistry";
 import { ResourceBrowser } from "./control/ResourceBrowser";
 import { Dynamic } from "solid-js/web";
@@ -31,10 +31,10 @@ const views: {[k: string]: ControlPanelView} = {
 
 export function ControlPanel(){
   const resourceSet = new Set<string>();
-  const collapsed = createData(false);
-  const unusedResources = createData<Res[]>([]);
-  const usedResources = createData<Res[]>([]);
-  const selectedMenu = createData<string>("resourceManager");
+  const collapsed = createBucket(false);
+  const unusedResources = createBucket<Res[]>([]);
+  const usedResources = createBucket<Res[]>([]);
+  const selectedMenu = createBucket<string>("resourceManager");
   
   const onImport = (inputElem: HTMLInputElement) => {
     if (inputElem.files) {
