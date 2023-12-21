@@ -1,14 +1,12 @@
 import { Divider, ToggleButton, ToggleButtonGroup } from "@suid/material";
 import { createBucket } from "../mgrui/lib/components/utils";
-import { For, JSX, ValidComponent } from "solid-js";
+import { For, JSX, JSXElement, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { IoText } from 'solid-icons/io';
 import { FaSolidPenNib } from 'solid-icons/fa';
 import { globalCustomEventRegistry } from "../mgrui/lib/components/EventRegistry";
 import Events from "../Events";
 import TextComponent from "./component/TextComponent";
-import interact from "interactjs";
-import InteractElement from "./component/InteractElement";
 
 function TextComponentConfig() {
   return (
@@ -26,6 +24,10 @@ interface Component {
   icon: ValidComponent;
   view: ValidComponent;
   configView: ValidComponent;
+}
+
+interface ComponentInstance {
+
 }
 
 const components: {[k: string]: Component} = {
