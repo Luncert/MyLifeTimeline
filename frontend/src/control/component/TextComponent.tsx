@@ -1,20 +1,23 @@
-import { Match, Switch } from "solid-js";
+import { Match, Switch, splitProps } from "solid-js";
 import ResizeableElement from "./ResizeableElement";
 import { createBucket } from "../../mgrui/lib/components/utils";
-import { TextField, Typography } from "@suid/material";
+import { Input, TextField, Typography } from "@suid/material";
 import { BasicComponentProps } from "../ComponentBrowser";
 
 export default function TextComponent(props: {
-  defaultValue?: string;
 } & BasicComponentProps) {
   const editting = createBucket(false);
-  const content = createBucket(props.defaultValue);
+  const content = createBucket("Text Component");
+  const [local, others] = splitProps(props, []);
 
   return (
-    <ResizeableElement>
+    <ResizeableElement {...others}>
       <Switch>
-        <Match when={props.editable && editting()}>
-          <TextField value={content()} onChange={(evt, v) => content(v)} />
+        <Match when={editting()}>
+          {/* <TextField value={content()} onChange={(evt, v) => content(v)} /> */}
+          <Input value={content()}
+            onBlur={() => editting(false)}
+            onChange={(evt, v) => content(v)} />
         </Match>
         <Match when={!editting()}>
           <Typography onClick={() => editting(true)}>{content()}</Typography>

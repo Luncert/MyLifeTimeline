@@ -6,15 +6,7 @@ import { IoText } from 'solid-icons/io';
 import { FaSolidPenNib } from 'solid-icons/fa';
 import { globalCustomEventRegistry } from "../mgrui/lib/components/EventRegistry";
 import Events from "../Events";
-
-function TextComponent(props: {
-} & JSX.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div class="absolute" {...props}>
-      text component config
-    </div>
-  )
-}
+import TextComponent from "./component/TextComponent";
 
 function TextComponentConfig() {
   return (
@@ -24,8 +16,7 @@ function TextComponentConfig() {
   )
 }
 
-export interface BasicComponentProps {
-  editable?: boolean;
+export interface BasicComponentProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 interface Component {
