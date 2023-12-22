@@ -3,7 +3,7 @@ import HomeSidebar, { Entry } from "./HomeSidebar";
 import { createBucket } from "./mgrui/lib/components/utils";
 import { FaSolidFolderClosed } from 'solid-icons/fa';
 import { For, ValidComponent } from "solid-js";
-import ResourceBrowser from "./ResourceBrowser";
+import ResourceBrowser from "./StorageManager";
 import { Dynamic } from "solid-js/web";
 
 interface EntryWithContent extends Entry {
