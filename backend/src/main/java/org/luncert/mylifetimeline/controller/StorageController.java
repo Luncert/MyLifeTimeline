@@ -47,8 +47,13 @@ public class StorageController {
   }
 
   @PostMapping("/{*path}")
-  public void uploadFile(@PathVariable("path") String path, @RequestParam("file") MultipartFile file) {
-    storageService.store(path, file);
+  public void createFile(@PathVariable("path") String path,
+                         @RequestParam(value = "file", required = false) MultipartFile file) {
+    if (file != null) {
+      storageService.store(path, file);
+      return;
+    }
+    storageService.createDirectory(path);
   }
 
   @DeleteMapping("/{*path}")

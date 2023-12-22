@@ -2,11 +2,12 @@ import { Breadcrumbs, Button, ButtonGroup, Divider, Grid, IconButton, InputAdorn
 import { IoArrowBackOutline, IoArrowForwardOutline } from 'solid-icons/io';
 import { BiRegularSearchAlt } from 'solid-icons/bi';
 import { For, Match, Show, Switch, createContext, createResource } from "solid-js";
-import { createBucket, useCtx } from "./mgrui/lib/components/utils";
+import { copyOfRange, createBucket, useCtx } from "./mgrui/lib/components/utils";
 import { AiTwotoneFileText } from 'solid-icons/ai';
 import { FaSolidAngleDown, FaSolidAngleRight, FaRegularFolderOpen, FaRegularFolderClosed } from 'solid-icons/fa';
 import { IoFolderOpen, IoFolder } from 'solid-icons/io';
 import { FaSolidUpload } from 'solid-icons/fa';
+import { CgFolderAdd } from 'solid-icons/cg';
 import getBackend from "./service/Backend";
 
 interface FileNode {
@@ -137,7 +138,13 @@ function CurrentPathBrowser() {
     <div class="flex flex-col w-full h-full shrink">
       <Stack class="p-1 gap-x-1" direction="row">
         <ButtonGroup class="shrink-0" variant="contained" size="small">
-          <Button size="small">New Folder</Button>
+          <Button size="small" onClick={() => {
+            const p = copyOfRange(ctx.path(), 0, ctx.currentPath() + 1);
+            p.push("New Folder")
+            getBackend().createDirectory(p.join("/"));
+          }}>
+            <CgFolderAdd />
+          </Button>
           <Button size="small">
             <FaSolidUpload />
           </Button>

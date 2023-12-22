@@ -79,6 +79,15 @@ public class StorageService {
     }
   }
 
+  public void createDirectory(String path) {
+    Path p = resolvePath(path);
+    try {
+      FileUtils.forceMkdir(p.toFile());
+    } catch (IOException e) {
+      throw new StorageException("Could not create directory", e);
+    }
+  }
+
   public void store(String path, MultipartFile file) {
     try {
       if (file.isEmpty()) {
