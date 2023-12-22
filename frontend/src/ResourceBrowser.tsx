@@ -1,8 +1,35 @@
-import { Breadcrumbs, Button, ButtonGroup, IconButton, InputAdornment, Link, Stack, TextField, Typography } from "@suid/material";
+import { Breadcrumbs, Button, ButtonGroup, Grid, IconButton, InputAdornment, Link, Stack, TextField, Typography } from "@suid/material";
 import { IoArrowBackOutline, IoArrowForwardOutline } from 'solid-icons/io';
 import { BiRegularSearchAlt } from 'solid-icons/bi';
 import { For, createContext } from "solid-js";
 import { createBucket, useCtx } from "./mgrui/lib/components/utils";
+import { AiTwotoneFileText } from 'solid-icons/ai';
+
+interface File {
+  name: string;
+  mediaType: string;
+  directory?: boolean;
+  preview?: string;
+}
+
+const files: File[] = [
+  {
+    name: "a.png",
+    mediaType: "image/png"
+  },
+  {
+    name: "a.png",
+    mediaType: "image/png"
+  },
+  {
+    name: "a.png",
+    mediaType: "image/png"
+  },
+  {
+    name: "a.png",
+    mediaType: "image/png"
+  },
+]
 
 interface ResourceBrowserContextDef {
   path: Bucket<string[]>;
@@ -56,7 +83,27 @@ export default function ResourceBrowser() {
             )
           }} />
         </Stack>
+        <div class="w-full h-full shrink">
+          <Grid container spacing={2}>
+            <For each={files}>{file => (
+              <Grid item xs={8} md={1}>
+                <FileElement file={file} />
+              </Grid>
+            )}</For>
+          </Grid>
+        </div>
       </div>
     </ResourceBrowserContext.Provider>
+  )
+}
+
+function FileElement(props: {
+  file: File;
+}) {
+  return (
+    <div class="w-full h-full">
+      <AiTwotoneFileText class="text-5xl" />
+      {props.file.name}
+    </div>
   )
 }
