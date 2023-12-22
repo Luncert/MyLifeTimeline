@@ -1,0 +1,5 @@
+app:
+  corsAllowedOrigins: http://localhost:3000
+  storage:
+    path: storage
+    startupMode: overwrite

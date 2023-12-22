@@ -48,6 +48,11 @@ declare global {
   type Comparator<T> = (a: T, b: T) => -1 | 0 | 1;
 
   type Call<T, R> = (v: T) => R;
+
+  interface StorageFile {
+    name: string;
+    mediaType: string;
+  }
 }
 
 // declare module "solid-js" {

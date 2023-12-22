@@ -6,13 +6,8 @@ import { createBucket, useCtx } from "./mgrui/lib/components/utils";
 import { AiTwotoneFileText } from 'solid-icons/ai';
 import { FaSolidAngleDown, FaSolidAngleRight, FaRegularFolderOpen, FaRegularFolderClosed } from 'solid-icons/fa';
 import { IoFolderOpen, IoFolder } from 'solid-icons/io';
-
-interface File {
-  name: string;
-  mediaType: string;
-  directory?: boolean;
-  preview?: string;
-}
+import { FaSolidUpload } from 'solid-icons/fa';
+import getBackend from "./service/Backend";
 
 interface FileNode {
   name: string;
@@ -45,61 +40,6 @@ const fileTree: FileTree = [
     mediaType: "text"
   }
 ];
-
-const files: File[] = [
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-  {
-    name: "a.png",
-    mediaType: "image/png"
-  },
-]
 
 interface ResourceBrowserContextDef {
   path: Bucket<string[]>;
@@ -189,9 +129,30 @@ function FileTreeNode(props: {
 
 function CurrentPathBrowser() {
   const ctx = useResourceBrowser();
+  const [files, filesAction] = createResource(
+    () => getBackend().listFiles("/"),
+    { initialValue: [] as StorageFile[] }
+  );
   return (
     <div class="flex flex-col w-full h-full shrink">
       <Stack class="p-1 gap-x-1" direction="row">
+        <ButtonGroup class="shrink-0" variant="contained" size="small">
+          <Button size="small">New Folder</Button>
+          <Button size="small">
+            <FaSolidUpload />
+          </Button>
+          <Button onClick={() => {
+            ctx.currentPath(Math.max(0, ctx.currentPath() - 1));
+          }}>
+            <IoArrowBackOutline />
+          </Button>
+          <Button onClick={() => {
+            ctx.currentPath(Math.min(ctx.path().length - 1, ctx.currentPath() + 1));
+          }}>
+            <IoArrowForwardOutline />
+          </Button>
+        </ButtonGroup>
+
         <Breadcrumbs class="shrink-0" aria-label="breadcrumb" sx={{
         }}>
           <For each={ctx.path().filter((v, i) => i <= ctx.currentPath())}>{(item, idx) => (
@@ -201,24 +162,11 @@ function CurrentPathBrowser() {
             </IconButton>
           )}</For>
         </Breadcrumbs>
-
-        <ButtonGroup class="ml-auto shrink-0 gap-1">
-          <IconButton sx={{ borderRadius: 2 }} onClick={() => {
-            ctx.currentPath(Math.max(0, ctx.currentPath() - 1));
-          }}>
-            <IoArrowBackOutline />
-          </IconButton>
-          <IconButton sx={{ borderRadius: 2 }} onClick={() => {
-            ctx.currentPath(Math.min(ctx.path().length - 1, ctx.currentPath() + 1));
-          }}>
-            <IoArrowForwardOutline />
-          </IconButton>
-        </ButtonGroup>
       </Stack>
       <Divider />
       <div class="w-full h-full shrink p-1 overflow-y-auto">
         <div class="flex flex-wrap gap-1">
-          <For each={files}>{file => (
+          <For each={files()}>{file => (
             <FileElement file={file} />
           )}</For>
         </div>
@@ -228,7 +176,7 @@ function CurrentPathBrowser() {
 }
 
 function FileElement(props: {
-  file: File;
+  file: StorageFile;
 }) {
   return (
     <IconButton color="info" sx={{
