@@ -5,6 +5,7 @@ import { splitProps } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 import { Dynamic } from "solid-js/web";
 import { useStorageManager } from "./StorageManager";
+import { BiSolidFile, BiSolidFileJpg, BiSolidFileJson } from 'solid-icons/bi';
 
 export default function FileElement(props: {
   file: StorageFile;
@@ -16,7 +17,11 @@ export default function FileElement(props: {
       borderRadius: 1.5,
       width: "5rem",
       height: "5rem"
-    }} onClick={() => ctx.open(props.file.name)}>
+    }} onClick={() => {
+      if (props.file.mediaType === 'directory') {
+        ctx.open(props.file.name);
+      }
+    }}>
       <div class="flex flex-col items-center">
         <DynamicIconByMediaType mediaType={props.file.mediaType} class="text-5xl" />
         <span class="text-sm text-zinc-900">{props.file.name}</span>
@@ -26,7 +31,11 @@ export default function FileElement(props: {
 }
 
 const mediaTypeToIcon = {
-  directory: IoFolder
+  directory: IoFolder,
+  "application/octet-stream": BiSolidFile,
+  "application/json": BiSolidFileJson,
+  "image/jpeg": BiSolidFileJpg,
+  "image/jpg": BiSolidFileJpg,
 }
 
 export function DynamicIconByMediaType(props: {

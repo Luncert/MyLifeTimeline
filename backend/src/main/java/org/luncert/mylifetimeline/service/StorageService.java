@@ -25,6 +25,7 @@ import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,7 +95,9 @@ public class StorageService {
         throw new StorageException("Failed to store empty file.");
       }
 
-      Path destinationFile = resolvePath(path);
+      Path directory = resolvePath(path);
+      Path destinationFile = directory.resolve(file.getOriginalFilename());
+      checkPath(destinationFile);
       try (InputStream inputStream = file.getInputStream()) {
         Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
       }
@@ -123,10 +126,13 @@ public class StorageService {
     }
 
     String fileName = file.getName();
-    return new StorageFile(fileName,
-        file.isDirectory()
-            ? Constants.DIRECTORY
-            : URLConnection.guessContentTypeFromName(fileName));
+    String contentType = file.isDirectory()
+        ? Constants.DIRECTORY
+        : URLConnection.guessContentTypeFromName(fileName);
+    if (contentType == null) {
+      contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+    }
+    return new StorageFile(fileName, contentType);
   }
 
   private Path resolvePath(String path) {

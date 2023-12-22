@@ -8,11 +8,13 @@ import { FaSolidCheck } from 'solid-icons/fa';
 import getBackend from "./service/Backend";
 import FileElement from "./FileElement";
 import { useStorageManager } from "./StorageManager";
+import { FiUpload } from "solid-icons/fi";
 
 export default function CurrentPathBrowser() {
   const ctx = useStorageManager();
   const createNewFolderAnchor = createBucket<HTMLElement | null>(null);
   const newFolderName = createBucket("");
+  let inputEl: HTMLSpanElement;
 
   const [files, filesAction] = createResource(
     () => getBackend().listFiles(ctx.getPath()),
@@ -31,6 +33,14 @@ export default function CurrentPathBrowser() {
     }
     getBackend().createDirectory(ctx.getPath(name))
       .then(() => filesAction.refetch());
+  };
+
+  const onImport = (inputElem: HTMLInputElement) => {
+    if (inputElem.files) {
+      for (let f of inputElem.files) {
+        getBackend().uploadFile(ctx.getPath(), f);
+      }
+    }
   };
 
   return (
@@ -66,9 +76,20 @@ export default function CurrentPathBrowser() {
               }}
             />
           </Popover>
-          <Button>
-            <FaSolidUpload />
+
+          <Button onClick={() => inputEl.click()}>
+            <FiUpload />
           </Button>
+          <label for="import-configuration-input">
+            <input
+              class="hidden"
+              id="import-configuration-input"
+              accept="*"
+              type="file"
+              onChange={(evt) => onImport(evt.target)}
+            />
+            <span ref={el => inputEl = el} class="hidden"></span>
+          </label>
           <Button onClick={() => ctx.backward()}>
             <IoArrowBackOutline />
           </Button>

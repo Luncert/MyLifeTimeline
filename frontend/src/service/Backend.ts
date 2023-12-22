@@ -36,8 +36,14 @@ class Backend {
     });
   }
 
-  public async uploadFile(path: string): Promise<any> {
-    return axios.post(`/storage/${path}`);
+  public async uploadFile(path: string, file: File): Promise<any> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return axios.post(`/storage/${path}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
 
   public async createDirectory(path: string): Promise<any> {
