@@ -1,12 +1,11 @@
 import { Divider } from "@suid/material";
-import { createContext } from "solid-js";
+import { batch, createContext, createMemo } from "solid-js";
 import { copyOfRange, createBucket, useCtx } from "./mgrui/lib/components/utils";
 import FileTree from "./FileTree";
 import CurrentPathBrowser from "./CurrentPathBrowser";
 
 interface StorageManagerContextDef {
-  openPath: Consumer<string>;
-  openInCurrentPath: Consumer<string>;
+  open: Consumer<string>;
   getPath: (...suffix: string[]) => string;
   backward: Callback;
   forward: Callback;
@@ -24,24 +23,27 @@ export default function StorageManager() {
   const currentPath = createBucket(-1);
   return (
     <StorageManagerContext.Provider value={{
-      getPath: () => {
-        const p = copyOfRange(path(), 0, currentPath());
+      getPath: (...suffix: string[]) => {
+        const p = copyOfRange(path(), 0, currentPath() + 1);
+        if (suffix) {
+          p.push(...suffix);
+        }
         return p.join("/");
       },
-      openPath: (p) => {
-        path(p.split("/"));
-        currentPath(path().length - 1);
-      },
-      openInCurrentPath: (directory) => {
+      open: (directory) => {
         if (path()[currentPath() + 1] !== directory) {
-          const p = copyOfRange(path(), 0, currentPath());
+          const p = copyOfRange(path(), 0, currentPath() + 1);
           p.push(directory);
-          path(p);
+          batch(() => {
+            path(p);
+            currentPath(currentPath() + 1);
+          });
+        } else {
+          currentPath(currentPath() + 1);
         }
-        currentPath(currentPath() + 1);
       },
       backward: () => {
-        currentPath(Math.max(0, currentPath() - 1));
+        currentPath(Math.max(-1, currentPath() - 1));
       },
       forward: () => {
         currentPath(Math.min(path().length - 1, currentPath() + 1));

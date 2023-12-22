@@ -35,11 +35,9 @@ export default function CurrentPathBrowser() {
 
   return (
     <div class="flex flex-col w-full h-full shrink">
-      <Stack class="h-10 p-1 gap-x-1" direction="row">
-        <ButtonGroup class="shrink-0" variant="contained" size="small">
-          <Button size="small" onClick={(evt) => {
-            createNewFolderAnchor(evt.currentTarget);
-          }}>
+      <Stack class="h-11 p-1 gap-x-1 shrink-0" direction="row">
+        <ButtonGroup class="shrink-0" variant="contained">
+          <Button onClick={(evt) => createNewFolderAnchor(evt.currentTarget)}>
             <CgFolderAdd />
           </Button>
           <Popover
@@ -68,26 +66,24 @@ export default function CurrentPathBrowser() {
               }}
             />
           </Popover>
-          <Button size="small">
+          <Button>
             <FaSolidUpload />
           </Button>
-          <Button onClick={() => {
-          }}>
+          <Button onClick={() => ctx.backward()}>
             <IoArrowBackOutline />
           </Button>
-          <Button onClick={() => {
-          }}>
+          <Button onClick={() => ctx.forward()}>
             <IoArrowForwardOutline />
           </Button>
         </ButtonGroup>
 
-        <Breadcrumbs class="shrink-0" aria-label="breadcrumb" sx={{
+        <Breadcrumbs class="flex shrink-0 items-center" sx={{
         }}>
           <For each={ctx.getPath().split("/")}>{(item, idx) => (
-            <IconButton size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2 }}
+            <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2 }}
               onClick={() => ctx.changeCurrentPathByIdx(idx())}>
               {item}
-            </IconButton>
+            </Button>
           )}</For>
         </Breadcrumbs>
       </Stack>

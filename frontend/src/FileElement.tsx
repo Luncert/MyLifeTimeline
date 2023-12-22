@@ -16,7 +16,7 @@ export default function FileElement(props: {
       borderRadius: 1.5,
       width: "5rem",
       height: "5rem"
-    }} onClick={() => ctx.openInCurrentPath(props.file.name)}>
+    }} onClick={() => ctx.open(props.file.name)}>
       <div class="flex flex-col items-center">
         <DynamicIconByMediaType mediaType={props.file.mediaType} class="text-5xl" />
         <span class="text-sm text-zinc-900">{props.file.name}</span>

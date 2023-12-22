@@ -6,3 +6,4 @@ indexing
 target/
 */target
 deploy.sh
+storage/
