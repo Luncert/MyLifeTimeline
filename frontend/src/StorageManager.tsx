@@ -5,11 +5,12 @@ import FileTree from "./FileTree";
 import CurrentPathBrowser from "./CurrentPathBrowser";
 import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import Events from "./Events";
+import Paths, { Path } from "./Paths";
 
 interface StorageManagerContextDef {
-  open: Consumer<string>;
+  open: Consumer<Path>;
   openInCwd: Consumer<string>;
-  getPath: (...suffix: string[]) => string;
+  getPath: (path?: string) => Path;
   backward: Callback;
   forward: Callback;
   changeCurrentPathByIdx: Consumer<number>;
@@ -22,30 +23,29 @@ export function useStorageManager() {
 }
 
 export default function StorageManager() {
-  const path = createBucket<string[]>([]);
+  const path = createBucket<Path>(Paths.resolvePath("/"));
   const currentPath = createBucket(-1);
   return (
     <StorageManagerContext.Provider value={{
-      getPath: (...suffix: string[]) => {
-        const p = copyOfRange(path(), 0, currentPath() + 1);
-        if (suffix) {
-          p.push(...suffix);
-        }
-        return p.join("/");
+      getPath: (p?: string) => {
+        return p ? path().resolve(p) : path();
       },
-      open: (p) => {
-        p = p.replace("/+", "");
-        path(p.split("/"));
-        currentPath(path().length - 1);
+      open: (newPath) => {
+        const oldPath = path();
+        if (oldPath.isChildOf(newPath)) {
+          currentPath(newPath.length());
+        } else {
+          path(newPath);
+          currentPath(newPath.length() - 1);
+        }
         globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.ChangeWorkDir));
       },
       openInCwd: (directory) => {
-        if (path()[currentPath() + 1] !== directory) {
-          const p = copyOfRange(path(), 0, currentPath() + 1);
-          p.push(directory);
+        if (path().getPattern(currentPath() + 1) !== directory) {
+          const newPath = path().resolve(directory);
           batch(() => {
-            path(p);
-            currentPath(currentPath() + 1);
+            path(newPath);
+            currentPath(newPath.length() - 1);
           });
         } else {
           currentPath(currentPath() + 1);
@@ -55,13 +55,14 @@ export default function StorageManager() {
       backward: () => {
         const old = currentPath();
         currentPath(Math.max(-1, currentPath() - 1));
+        console.log(currentPath())
         if (old !== currentPath()) {
           globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.ChangeWorkDir));
         }
       },
       forward: () => {
         const old = currentPath();
-        currentPath(Math.min(path().length - 1, currentPath() + 1));
+        currentPath(Math.min(path().length() - 1, currentPath() + 1));
         if (old !== currentPath()) {
           globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.ChangeWorkDir));
         }

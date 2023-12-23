@@ -9,6 +9,7 @@ import getBackend from "./service/Backend";
 import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import Events from "./Events";
 import { useStorageManager } from "./StorageManager";
+import Paths, { Path } from "./Paths";
 
 interface FileNode {
   name: string;
@@ -24,13 +25,14 @@ type FileTree = (DirectoryNode | FileNode)[];
 
 export default function FileTree() {
   const [files, filesAction] = createResource(
-    () => getBackend().listFiles("/"),
+    () => getBackend().listFiles(Paths.resolvePath("/")),
     { initialValue: [] as StorageFile[]});
+  const path = Paths.resolvePath("/");
 
   onMount(() => {
     globalCustomEventRegistry.on(Events.Storage.Upload, (evt) => {
-      const p = evt.detail.path as string;
-      if (p.indexOf("/") === -1) {
+      const p = evt.detail.path as Path;
+      if (p.isChildOf(path)) {
         filesAction.refetch();
       }
     });
@@ -38,7 +40,7 @@ export default function FileTree() {
 
   return (
     <div class="flex flex-col gap-1 p-1 w-1/3">
-      <TextField class="w-full" size="small" autoComplete="none" InputProps={{
+      {/* <TextField class="w-full" size="small" autoComplete="none" InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             <IconButton edge="end" sx={{ borderRadius: 2 }}>
@@ -46,23 +48,23 @@ export default function FileTree() {
             </IconButton>
           </InputAdornment>
         )
-      }} />
+      }} /> */}
       <For each={files()}>{f => (
-        <FileTreeNode basePath="" file={f} />
+        <FileTreeNode basePath={path} file={f} />
       )}</For>
     </div>
   )
 }
 
 function FileTreeNode(props: {
-  basePath: string;
+  basePath: Path;
   file: StorageFile;
 }) {
   const storage = useStorageManager();
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
   const children = createBucket<StorageFile[] | null>(null);
-  const path = props.basePath + "/" + props.file.name;
+  const path = props.basePath.resolve(props.file.name);
 
   const load = () => {
     getBackend().listFiles(path)
@@ -73,8 +75,8 @@ function FileTreeNode(props: {
 
   onMount(() => {
     globalCustomEventRegistry.on(Events.Storage.Upload, (evt) => {
-      const p = "/" + evt.detail.path;
-      if (p.startsWith(path) && p.replace(path + "/", "").indexOf("/") === -1) {
+      const p = evt.detail.path as Path;
+      if (p.isChildOf(path)) {
         load();
       }
     });
@@ -96,11 +98,10 @@ function FileTreeNode(props: {
             </Show>
           </Show>
         </div>
-      } sx={{justifyContent: "start"}} onClick={() => {
+      } sx={{justifyContent: "start", textTransform: "none"}} onClick={() => {
         if (isDirectory) {
-          if (expanded(!expanded())) {
-            storage.open(path);
-          }
+          expanded(!expanded());
+          storage.open(path);
           if (!children()) {
             load();
           }

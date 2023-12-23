@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import config from './config';
+import { Path } from '../Paths';
 
 const axios = Axios.create({
   baseURL: config.backend.endpoint
@@ -14,10 +15,7 @@ const colors = {
 
 class Backend {
 
-  public async getBinary(path: string): Promise<ArrayBuffer> {
-    if (path.startsWith("/")) {
-      path = path.substring(1);
-    }
+  public async getBinary(path: Path): Promise<ArrayBuffer> {
     return axios.get(`/storage/${path}`, {
       responseType: "arraybuffer"
     }).then((rep) => {
@@ -25,10 +23,7 @@ class Backend {
     });
   }
 
-  public async listFiles(path: string): Promise<StorageFile[]> {
-    if (path.startsWith("/")) {
-      path = path.substring(1);
-    }
+  public async listFiles(path: Path): Promise<StorageFile[]> {
     return axios.get(`/storage/${path}`, {
       responseType: "json"
     }).then((rep) => {
@@ -36,7 +31,7 @@ class Backend {
     });
   }
 
-  public async uploadFile(path: string, file: File): Promise<any> {
+  public async uploadFile(path: Path, file: File): Promise<any> {
     const formData = new FormData();
     formData.append("file", file);
     return axios.post(`/storage/${path}`, formData, {
@@ -46,7 +41,7 @@ class Backend {
     });
   }
 
-  public async createDirectory(path: string): Promise<any> {
+  public async createDirectory(path: Path): Promise<any> {
     return axios.post(`/storage/${path}`);
   }
 }

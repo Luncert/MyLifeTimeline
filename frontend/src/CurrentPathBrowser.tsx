@@ -10,6 +10,7 @@ import { useStorageManager } from "./StorageManager";
 import { FiUpload } from "solid-icons/fi";
 import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
 import Events from "./Events";
+import { Path } from "./Paths";
 
 export default function CurrentPathBrowser() {
   const ctx = useStorageManager();
@@ -22,7 +23,7 @@ export default function CurrentPathBrowser() {
     { initialValue: [] as StorageFile[] }
   );
 
-  const afterUpload = (path: string) => {
+  const afterUpload = (path: Path) => {
     filesAction.refetch();
     globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.Upload, {
       detail: { path }
@@ -111,8 +112,8 @@ export default function CurrentPathBrowser() {
 
         <Breadcrumbs class="flex shrink-0 items-center" sx={{
         }}>
-          <For each={ctx.getPath().split("/").filter(i => Boolean(i))}>{(item, idx) => (
-            <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2 }}
+          <For each={ctx.getPath().patterns()}>{(item, idx) => (
+            <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
               onClick={() => ctx.changeCurrentPathByIdx(idx())}>
               {item}
             </Button>
