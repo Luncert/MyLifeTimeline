@@ -71,12 +71,6 @@ function FileTreeNode(props: {
       });
   };
 
-  createEffect(() => {
-    if (expanded()) {
-      storage.open(path);
-    }
-  })
-
   onMount(() => {
     globalCustomEventRegistry.on(Events.Storage.Upload, (evt) => {
       const p = "/" + evt.detail.path;
@@ -104,7 +98,9 @@ function FileTreeNode(props: {
         </div>
       } sx={{justifyContent: "start"}} onClick={() => {
         if (isDirectory) {
-          expanded(!expanded());
+          if (expanded(!expanded())) {
+            storage.open(path);
+          }
           if (!children()) {
             load();
           }

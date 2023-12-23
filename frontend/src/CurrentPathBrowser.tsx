@@ -111,7 +111,7 @@ export default function CurrentPathBrowser() {
 
         <Breadcrumbs class="flex shrink-0 items-center" sx={{
         }}>
-          <For each={ctx.getPath().split("/")}>{(item, idx) => (
+          <For each={ctx.getPath().split("/").filter(i => Boolean(i))}>{(item, idx) => (
             <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2 }}
               onClick={() => ctx.changeCurrentPathByIdx(idx())}>
               {item}

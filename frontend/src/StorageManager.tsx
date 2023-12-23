@@ -34,6 +34,7 @@ export default function StorageManager() {
         return p.join("/");
       },
       open: (p) => {
+        p = p.replace("/+", "");
         path(p.split("/"));
         currentPath(path().length - 1);
         globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.ChangeWorkDir));
