@@ -28,12 +28,14 @@ export default function StorageManager() {
   return (
     <StorageManagerContext.Provider value={{
       getPath: (p?: string) => {
-        return p ? path().resolve(p) : path();
+        const patterns = path().subPatterns(currentPath() + 1);
+        const r = Paths.of(patterns);
+        return p ? r.resolve(p) : r;
       },
       open: (newPath) => {
         const oldPath = path();
-        if (oldPath.isChildOf(newPath)) {
-          currentPath(newPath.length());
+        if (oldPath.contains(newPath)) {
+          currentPath(newPath.length() - 1);
         } else {
           path(newPath);
           currentPath(newPath.length() - 1);
@@ -55,7 +57,6 @@ export default function StorageManager() {
       backward: () => {
         const old = currentPath();
         currentPath(Math.max(-1, currentPath() - 1));
-        console.log(currentPath())
         if (old !== currentPath()) {
           globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.ChangeWorkDir));
         }

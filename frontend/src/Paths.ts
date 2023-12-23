@@ -54,6 +54,15 @@ export class Path {
     return [...this.paths];
   }
 
+  subPatterns(end: number): string[] {
+    const r = [];
+    end = Math.min(end, this.paths.length);
+    for (let i = 0; i < end; i++) {
+      r.push(this.paths[i]);
+    }
+    return r;
+  }
+
   length() {
     return this.paths.length;
   }
@@ -87,6 +96,10 @@ function resolvePathToArray(path: string) {
   return paths;
 }
 
+export function of(paths: string[]) {
+  return new Path(paths);
+}
+
 export function contains(p1: string, p2: string) {
   return resolvePath(p1).contains(resolvePath(p2));
 }
@@ -96,6 +109,7 @@ export function isChildOf(p1: string, p2: string) {
 }
 
 export default ({
+  of,
   contains,
   resolvePath,
   isChildOf
