@@ -1,14 +1,15 @@
 import { Breadcrumbs, Button, ButtonGroup, Divider, IconButton, InputAdornment, Popover, Stack, TextField } from "@suid/material";
 import { IoArrowBackOutline, IoArrowForwardOutline } from 'solid-icons/io';
-import { For, createEffect, createResource } from "solid-js";
+import { For, createResource, onMount } from "solid-js";
 import { createBucket } from "./mgrui/lib/components/utils";
-import { FaSolidUpload } from 'solid-icons/fa';
 import { CgFolderAdd } from 'solid-icons/cg';
 import { FaSolidCheck } from 'solid-icons/fa';
 import getBackend from "./service/Backend";
 import FileElement from "./FileElement";
 import { useStorageManager } from "./StorageManager";
 import { FiUpload } from "solid-icons/fi";
+import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
+import Events from "./Events";
 
 export default function CurrentPathBrowser() {
   const ctx = useStorageManager();
@@ -21,27 +22,37 @@ export default function CurrentPathBrowser() {
     { initialValue: [] as StorageFile[] }
   );
 
-  createEffect(() => {
-    ctx.getPath();
+  const afterUpload = (path: string) => {
     filesAction.refetch();
-  });
+    globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.Upload, {
+      detail: { path }
+    }));
+  };
 
   const createNewFolder = () => {
     const name = newFolderName();
     if (name.length === 0) {
       return;
     }
-    getBackend().createDirectory(ctx.getPath(name))
-      .then(() => filesAction.refetch());
+    const p = ctx.getPath(name);
+    getBackend().createDirectory(p)
+      .then(() => afterUpload(p));
   };
 
   const onImport = (inputElem: HTMLInputElement) => {
     if (inputElem.files) {
       for (let f of inputElem.files) {
-        getBackend().uploadFile(ctx.getPath(), f);
+        getBackend().uploadFile(ctx.getPath(), f)
+          .then(() => afterUpload(ctx.getPath(f.name)));
       }
     }
   };
+
+  onMount(() => {
+    globalCustomEventRegistry.on(Events.Storage.ChangeWorkDir, (evt) => {
+      filesAction.refetch();
+    });
+  })
 
   return (
     <div class="flex flex-col w-full h-full shrink">

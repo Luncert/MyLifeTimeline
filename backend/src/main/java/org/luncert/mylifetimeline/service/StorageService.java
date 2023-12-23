@@ -59,7 +59,19 @@ public class StorageService {
     Path destinationFile = resolvePath(path);
     try (Stream<Path> s = Files.walk(destinationFile, 1)) {
       return s.filter(p -> !p.equals(destinationFile))
-          .map(this::load).collect(Collectors.toList());
+          .map(this::load)
+          .sorted((a, b) -> {
+            if (Constants.DIRECTORY.equals(a.getMediaType())) {
+              if (Constants.DIRECTORY.equals(b.getMediaType())) {
+                return a.getName().compareTo(b.getName());
+              }
+              return -1;
+            } else if (Constants.DIRECTORY.equals(b.getMediaType())) {
+              return 1;
+            }
+            return a.getName().compareTo(b.getName());
+          })
+          .collect(Collectors.toList());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
