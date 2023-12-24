@@ -3,9 +3,9 @@ import HomeSidebar, { Entry } from "./HomeSidebar";
 import { createBucket } from "./mgrui/lib/components/utils";
 import { FaSolidFolderClosed } from 'solid-icons/fa';
 import { For, ValidComponent } from "solid-js";
-import ResourceBrowser from "./StorageManager";
+import ResourceBrowser from "./views/storage/StorageManager";
 import { Dynamic } from "solid-js/web";
-import GalleryWithTimeline from "./GalleryWithTimeline";
+import GalleryWithTimeline from "./views/gallery/GalleryWithTimeline";
 import { FaSolidTimeline } from 'solid-icons/fa';
 
 interface EntryWithContent extends Entry {

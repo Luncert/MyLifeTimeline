@@ -1,10 +1,10 @@
 import { Show, createContext, createMemo } from "solid-js";
-import { createBucket, useCtx } from "./mgrui/lib/components/utils";
-import { createDomEventRegistry, globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
+import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
+import { createDomEventRegistry, globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
 import { ControlPanel } from "./ControlPanel";
-import Events from "./Events";
+import Events from "../../Events";
 
 interface TimelineCreatorContextDef {
   drag(res: Res, mousePos: Pos, mouseOffsetToElement: Pos): void;

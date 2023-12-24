@@ -1,5 +1,5 @@
 import { Popover, Stack, Typography } from "@suid/material";
-import { createBucket, names } from "./mgrui/lib/components/utils";
+import { createBucket, names } from "../../mgrui/lib/components/utils";
 
 interface TimelineNode {
   time: number;

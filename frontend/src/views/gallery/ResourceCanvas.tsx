@@ -1,8 +1,8 @@
 import { For, ValidComponent, onMount } from "solid-js";
-import { conditionalValue, createBucket, removeElementsFromArray } from "./mgrui/lib/components/utils";
-import { globalCustomEventRegistry } from "./mgrui/lib/components/EventRegistry";
+import { conditionalValue, createBucket, removeElementsFromArray } from "../../mgrui/lib/components/utils";
+import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import { DraggableResource } from "./Resource";
-import Events from "./Events";
+import Events from "../../Events";
 import { Dynamic } from "solid-js/web";
 
 type ResWithPos = {

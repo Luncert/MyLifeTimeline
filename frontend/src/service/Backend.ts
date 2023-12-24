@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import config from './config';
-import { Path } from '../Paths';
+import { Path } from '../common/Paths';
 
 const axios = Axios.create({
   baseURL: config.backend.endpoint
