@@ -16,7 +16,7 @@ interface StorageManagerContextDef {
   changeCurrentPathByIdx: Consumer<number>;
 }
 
-const StorageManagerContext = createContext<StorageManagerContextDef>();
+export const StorageManagerContext = createContext<StorageManagerContextDef>();
 
 export function useStorageManager() {
   return useCtx<StorageManagerContextDef>(StorageManagerContext as any);

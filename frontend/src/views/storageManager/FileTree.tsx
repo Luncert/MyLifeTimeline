@@ -1,6 +1,6 @@
 import { Button, IconButton, InputAdornment, TextField } from "@suid/material";
 import { BiRegularSearchAlt } from "solid-icons/bi";
-import { For, Show, createEffect, createResource, onMount } from "solid-js";
+import { For, Show, createEffect, createResource, onMount, useContext } from "solid-js";
 import { createBucket } from "../../mgrui/lib/components/utils";
 import { FaSolidAngleDown, FaSolidAngleRight } from "solid-icons/fa";
 import { IoFolder, IoFolderOpen } from "solid-icons/io";
@@ -8,7 +8,7 @@ import { MediaResourceIcon } from "./FileElement";
 import getBackend from "../../service/Backend";
 import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import Events from "../../Events";
-import { useStorageManager } from "./StorageManager";
+import { StorageManagerContext, useStorageManager } from "./StorageManager";
 import Paths, { Path } from "../../common/Paths";
 
 interface FileNode {
@@ -56,11 +56,11 @@ export default function FileTree() {
   )
 }
 
-function FileTreeNode(props: {
+export function FileTreeNode(props: {
   basePath: Path;
   file: StorageFile;
 }) {
-  const storage = useStorageManager();
+  const storage = useContext(StorageManagerContext);
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
   const children = createBucket<StorageFile[] | null>(null);
@@ -101,7 +101,7 @@ function FileTreeNode(props: {
       } sx={{justifyContent: "start", textTransform: "none"}} onClick={() => {
         if (isDirectory) {
           expanded(!expanded());
-          storage.open(path);
+          storage?.open(path);
           if (!children()) {
             load();
           }
