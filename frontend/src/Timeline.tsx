@@ -9,7 +9,7 @@ interface TimelineNode {
 
 export default function Timeline() {
   return (
-    <div class="px-4 h-full
+    <div class="px-4 h-full shrink-0
       before:block before:content-[' '] before:w-4 before:h-full before:bg-rose-300">
       <TimelineItems offset={121} node={{ time: 1703386851635, title: "XX", description: "ASXS"}} />
     </div>
