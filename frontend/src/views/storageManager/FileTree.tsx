@@ -59,6 +59,7 @@ export default function FileTree() {
 export function FileTreeNode(props: {
   basePath: Path;
   file: StorageFile;
+  onSelect?: Consumer<StorageFile>;
 }) {
   const storage = useContext(StorageManagerContext);
   const expanded = createBucket(false);
@@ -105,6 +106,8 @@ export function FileTreeNode(props: {
           if (!children()) {
             load();
           }
+        } else {
+          props.onSelect?.(props.file);
         }
       }}>
         <span class="whitespace-nowrap text-ellipsis overflow-hidden">{props.file.name}</span>
@@ -112,7 +115,7 @@ export function FileTreeNode(props: {
       <Show when={isDirectory && expanded()}>
         <div class="ml-[1.4rem]">
           <For each={children()}>{f => (
-            <FileTreeNode basePath={path} file={f} />
+            <FileTreeNode basePath={path} file={f} onSelect={props.onSelect} />
           )}</For>
         </div>
       </Show>

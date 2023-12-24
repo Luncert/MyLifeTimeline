@@ -1,17 +1,12 @@
-import { Backdrop, Button, ButtonGroup, MenuItem, Select, useTheme } from "@suid/material";
-import { For, createResource } from "solid-js";
+import { Backdrop, Button, ButtonGroup, IconButton, useTheme } from "@suid/material";
+import { For, JSX, createResource } from "solid-js";
 import { createBucket } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
 import Paths from "../../common/Paths";
 import getBackend from "../../service/Backend";
 import { FaSolidCheck } from "solid-icons/fa";
 import { TiCancel } from 'solid-icons/ti';
-
-const mediaTypes = [
-  "image/png",
-  "image/jpg",
-  "image/jpeg"
-]
+import { ImCross } from 'solid-icons/im';
 
 export default function StorageBrowserModal(props: {
   open: Bucket<boolean>;
@@ -25,6 +20,7 @@ export default function StorageBrowserModal(props: {
   const [files, filesAction] = createResource(
     () => getBackend().listFiles(Paths.resolvePath("/")),
     { initialValue: [] as StorageFile[]});
+  const selectedFiles = createBucket<StorageFile[]>([]);
   const accepted = createBucket("");
 
   const onClose = () => {
@@ -37,20 +33,15 @@ export default function StorageBrowserModal(props: {
       <div class="relative drop-shadow w-1/2 h-2/3 rounded-lg bg-white
         flex flex-col p-2">
         <For each={files()}>{f => (
-          <FileTreeNode basePath={path} file={f} />
+          <FileTreeNode basePath={path} file={f}
+            onSelect={(selectedFile) => selectedFiles([...selectedFiles(), selectedFile])} />
         )}</For>
         <div class="flex mt-auto w-full gap-1">
-          <div class="rounded-md bg-zinc-300 w-full h-10"></div>
-          <Select
-            id="demo-simple-select-autowidth"
-            value={accepted()}
-            onChange={(evt) => accepted(evt.target.value)}
-            autoWidth size="small"
-          >
-            <For each={mediaTypes}>{item => (
-              <MenuItem value={item}>{item}</MenuItem>
+          <div class="rounded-md border-[1px] border-zinc-300 w-full h-10 p-1">
+            <For each={selectedFiles()}>{f => (
+              <Capsule onDelete={() => {}}>{f.name}</Capsule>
             )}</For>
-          </Select>
+          </div>
           <ButtonGroup size="small">
             <Button variant="contained">
               <FaSolidCheck size={18}/>
@@ -63,4 +54,18 @@ export default function StorageBrowserModal(props: {
       </div>
     </Backdrop>
   );
+}
+
+function Capsule(props: {
+  onDelete: Callback;
+  children: JSX.Element;
+}) {
+  return (
+    <div class="flex inline-block w-max h-full p-1 rounded-md bg-zinc-300 shadow-md">
+      <span class="px-1">{props.children}</span>
+      <IconButton size="small" color="error" onClick={props.onDelete}>
+        <ImCross size={14} />
+      </IconButton>
+    </div>
+  )
 }
