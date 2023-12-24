@@ -2,11 +2,11 @@ import { Divider } from "@suid/material";
 import HomeSidebar, { Entry } from "./HomeSidebar";
 import { createBucket } from "./mgrui/lib/components/utils";
 import { FaSolidFolderClosed } from 'solid-icons/fa';
-import { RiMediaGalleryFill } from 'solid-icons/ri';
 import { For, ValidComponent } from "solid-js";
 import ResourceBrowser from "./StorageManager";
 import { Dynamic } from "solid-js/web";
-import Gallery from "./Gallery";
+import GalleryWithTimeline from "./GalleryWithTimeline";
+import { FaSolidTimeline } from 'solid-icons/fa';
 
 interface EntryWithContent extends Entry {
   content: ValidComponent;
@@ -20,8 +20,8 @@ const entries: {[k: string]: EntryWithContent} = {
   },
   gallery: {
     name: "Gallery",
-    icon: RiMediaGalleryFill,
-    content: Gallery,
+    icon: FaSolidTimeline,
+    content: GalleryWithTimeline,
   }
 }
 

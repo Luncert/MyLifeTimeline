@@ -27,7 +27,8 @@ function TimelineItems(props: {
       top: props.offset + "px"
     }}>
       <div class="w-4 h-4 bg-white outline outline-4 outline-offset-0 outline-rose-300 rounded-3xl transition-all
-        hover:outline-rose-200 hover:bg-rose-100 hover:drop-shadow"
+        hover:drop-shadow
+        active:outline-rose-200 active:bg-rose-100"
         onMouseEnter={(evt) => {
           anchorEl(evt.currentTarget);
           hovered(true);
@@ -40,14 +41,15 @@ function TimelineItems(props: {
       </div>
       <div class="absolute left-[100%] top-1/2">
         <div class={names("w-max",
-          "before:block before:relative before:content-[' '] before:h-[1px] before:bg-rose-300 before:transition-width before:duration-200",
+          "before:block before:relative before:content-[' '] before:h-[1px] before:bg-rose-300 before:transition-[width left] before:duration-200",
           hovered() ? "before:left-1 before:w-[140%]": "before:left-1/2 before:w-0"
         )}>
           <div class={names("w-max text-rose-400 transition-all px-3",
             hovered() ? "-translate-y-[100%]" : "-translate-y-1/2")}>
             {parseTimestamp(props.node.time)}
           </div>
-          <div class="flex flex-col absolute left-[100%] -top-[100%] drop-shadow p-2 bg-rose-400 text-white">
+          <div class={names("flex flex-col absolute -top-[100%] drop-shadow p-2 bg-rose-400 text-white transition-[opacity left] duration-150",
+            hovered() ? "opacity-1 left-full" : "opacity-0 left-0")}>
             <span class="text-lg font-semibold">{props.node.title}</span>
             <span>{props.node.description}</span>
           </div>
