@@ -5,6 +5,7 @@ import { FiEdit2 } from 'solid-icons/fi';
 import ScrollBox from "../../mgrui/lib/components/ScrollBox";
 import StorageBrowserModal from "../storageManager/StorageBrowserModal";
 import { createBucket } from "../../mgrui/lib/components/utils";
+import GalleryCanvas from "./GalleryCanvas";
 
 export default function GalleryWithTimeline() {
   return (
@@ -33,11 +34,9 @@ function Show() {
 }
 
 function Edit() {
-  const openModal = createBucket(false);
   return (
     <div id="gallery-with-timeline-edit">
-      <StorageBrowserModal open={openModal} onClose={(files) => console.log(files)}/>
-
+      <GalleryCanvas />
     </div>
   );
 }

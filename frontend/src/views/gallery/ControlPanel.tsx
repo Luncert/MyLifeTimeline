@@ -40,7 +40,7 @@ export function ControlPanel(){
   const collapsed = createBucket(false);
   const unusedResources = createBucket<Res[]>([]);
   const usedResources = createBucket<Res[]>([]);
-  const selectedMenu = createBucket<string>("componentBrowser");
+  const selectedMenu = createBucket<string>("pageSettings");
   
   onMount(() => {
     globalCustomEventRegistry.on(Events.DragTo, (evt) => {
