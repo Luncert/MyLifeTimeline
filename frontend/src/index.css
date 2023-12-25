@@ -47,6 +47,11 @@ html, body, #root {
   background-color: rgb(204, 206, 207);
 }
 
+.invisible-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
 .portal-container div {
   position: relative;
 }

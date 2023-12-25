@@ -53,6 +53,8 @@ declare global {
     name: string;
     mediaType: string;
   }
+
+  type FileFilter = (file: StorageFile) => boolean;
 }
 
 // declare module "solid-js" {

@@ -33,10 +33,10 @@ function Show() {
 }
 
 function Edit() {
-  const openModal = createBucket(true);
+  const openModal = createBucket(false);
   return (
     <div id="gallery-with-timeline-edit">
-      <StorageBrowserModal open={openModal} onClose={() => {}}/>
+      <StorageBrowserModal open={openModal} onClose={(files) => console.log(files)}/>
 
     </div>
   );

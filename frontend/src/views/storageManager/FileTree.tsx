@@ -59,8 +59,11 @@ export default function FileTree() {
 export function FileTreeNode(props: {
   basePath: Path;
   file: StorageFile;
+  filter?: FileFilter;
   onSelect?: Consumer<StorageFile>;
+  onUnselect?: Consumer<StorageFile>;
 }) {
+  const selected = createBucket(false);
   const storage = useContext(StorageManagerContext);
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
@@ -70,7 +73,7 @@ export function FileTreeNode(props: {
   const load = () => {
     getBackend().listFiles(path)
       .then((files) => {
-        children(files);
+        children(props.filter ? files.filter(props.filter) : files);
       });
   };
 
@@ -85,7 +88,7 @@ export function FileTreeNode(props: {
 
   return (
     <div>
-      <Button fullWidth color="inherit" size="small" startIcon={
+      <Button fullWidth color={selected() ? "primary" : "inherit"} size="small" startIcon={
         <div class="inline-block flex gap-1">
           <Show when={isDirectory} fallback={<MediaResourceIcon mediaType={props.file.mediaType} />}>
             <Show when={expanded()} fallback={
@@ -107,7 +110,11 @@ export function FileTreeNode(props: {
             load();
           }
         } else {
-          props.onSelect?.(props.file);
+          if (selected(!selected())) {
+            props.onSelect?.(props.file);
+          } else {
+            props.onUnselect?.(props.file);
+          }
         }
       }}>
         <span class="whitespace-nowrap text-ellipsis overflow-hidden">{props.file.name}</span>
@@ -115,7 +122,8 @@ export function FileTreeNode(props: {
       <Show when={isDirectory && expanded()}>
         <div class="ml-[1.4rem]">
           <For each={children()}>{f => (
-            <FileTreeNode basePath={path} file={f} onSelect={props.onSelect} />
+            <FileTreeNode basePath={path} file={f}
+              onSelect={props.onSelect} onUnselect={props.onUnselect} />
           )}</For>
         </div>
       </Show>
