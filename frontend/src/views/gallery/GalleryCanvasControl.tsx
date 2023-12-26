@@ -9,9 +9,8 @@ import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';
 import { RiSystemSettings3Fill } from 'solid-icons/ri';
 import PageSettings from "./PageSettings";
 import Events from "../../Events";
-import { BiSolidComponent } from "solid-icons/bi";
-import ComponentBrowser from "../../control/ComponentBrowser";
-import { StyledDiv } from "../../mgrui/lib/components/Styled";
+import { CgFormatIndentIncrease } from 'solid-icons/cg';
+import ComponentAttributesEditor from "./ComponentAttributesEditor";
 
 interface ControlPanelView {
   name: string;
@@ -32,16 +31,21 @@ const views: {[k: string]: ControlPanelView} = {
   // },
   pageSettings: {
     name: "Page Settings",
-    icon: RiSystemSettings3Fill,
+    icon: () => <RiSystemSettings3Fill size={16} />,
     view: PageSettings
   },
+  componentAttributes: {
+    name: "Component Attributes",
+    icon: () => <CgFormatIndentIncrease size={16} />,
+    view: ComponentAttributesEditor
+  }
 };
 
 export function GalleryCanvasControl(){
   const collapsed = createBucket(false);
   const unusedResources = createBucket<Res[]>([]);
   const usedResources = createBucket<Res[]>([]);
-  const selectedMenu = createBucket<string>("resourceManager");
+  const selectedMenu = createBucket<string>("componentAttributes");
   
   onMount(() => {
     globalCustomEventRegistry.on(Events.DragTo, (evt) => {
