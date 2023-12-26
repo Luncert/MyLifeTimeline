@@ -15,6 +15,10 @@ const colors = {
 
 class Backend {
 
+  public getFileUrl(file: StorageFile) {
+    return `${config.backend.endpoint}/storage/${encodeURI(file.path)}`;
+  }
+
   public async getBinary(path: Path) {
     return axios.get(`/storage/${path}`, {
       responseType: "blob"

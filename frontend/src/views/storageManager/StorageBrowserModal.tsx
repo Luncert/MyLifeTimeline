@@ -45,10 +45,7 @@ function StorageBrowserModalElem(props: {
   const path = Paths.resolvePath("/");
   const [files] = createResource(
     () => getBackend().listFiles(Paths.resolvePath("/"))
-      .then(files => {
-        files.forEach(f => f.path = path.resolve(encodeURIComponent(f.name)).toString());
-        return files.filter(props.filter);
-      }),
+      .then(files => files.filter(props.filter)),
     { initialValue: [] as StorageFile[]});
   const selectedFiles = createStampedBucket<Set<StorageFile>>(new Set());
   let selectedFileScroll: HTMLDivElement;

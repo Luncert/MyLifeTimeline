@@ -4,8 +4,6 @@ import StorageBrowserModal from "../storageManager/StorageBrowserModal";
 import { useGalleryCanvas } from "./GalleryCanvas";
 import { createEffect } from "solid-js";
 import getBackend from "../../service/Backend";
-import Paths from "../../common/Paths";
-import config from "../../service/config";
 
 export default function PageSettings() {
   const canvas = useGalleryCanvas();
@@ -14,7 +12,7 @@ export default function PageSettings() {
   createEffect(() => {
     const file = background();
     if (file !== null) {
-      canvas.background(`${config.backend.endpoint}/storage/${file.path}`);
+      canvas.background(getBackend().getFileUrl(file));
     }
   });
 

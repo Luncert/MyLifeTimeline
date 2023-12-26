@@ -9,6 +9,7 @@ import { BiSolidFile, BiSolidFileJpg, BiSolidFileJson, BiSolidFilePng } from 'so
 
 export default function FileElement(props: {
   file: StorageFile;
+  onSelect: Consumer<StorageFile>;
 }) {
   const ctx = useStorageManager();
   return (
@@ -20,6 +21,8 @@ export default function FileElement(props: {
     }} onClick={() => {
       if (props.file.mediaType === 'directory') {
         ctx.openInCwd(props.file.name);
+      } else {
+        props.onSelect(props.file);
       }
     }}>
       <MediaResourceIcon mediaType={props.file.mediaType} class="text-5xl" />

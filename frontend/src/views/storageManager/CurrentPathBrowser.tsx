@@ -12,12 +12,14 @@ import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegis
 import Events from "../../Events";
 import { Path } from "../../common/Paths";
 import { FiEye, FiEyeOff } from 'solid-icons/fi';
+import FilePreview from "./FilePreview";
 
 export default function CurrentPathBrowser() {
   const ctx = useStorageManager();
   const createNewFolderAnchor = createBucket<HTMLElement | null>(null);
   const newFolderName = createBucket("");
   const enablePreview = createBucket(false);
+  const selectedFile = createBucket<StorageFile | null>(null);
   let inputEl: HTMLSpanElement;
 
   const [files, filesAction] = createResource(
@@ -58,7 +60,7 @@ export default function CurrentPathBrowser() {
   })
 
   return (
-    <div class="flex flex-col w-full h-full shrink">
+    <div class="relative flex flex-col w-full h-full shrink">
       <Stack class="h-11 p-1 gap-x-1 shrink-0" direction="row">
         <ButtonGroup class="shrink-0" variant="contained">
           <Button onClick={(evt) => createNewFolderAnchor(evt.currentTarget)}>
@@ -130,10 +132,11 @@ export default function CurrentPathBrowser() {
       <div class="w-full h-full shrink p-1 overflow-y-auto">
         <div class="flex flex-wrap gap-1">
           <For each={files()}>{file => (
-            <FileElement file={file} />
+            <FileElement file={file} onSelect={selectedFile} />
           )}</For>
         </div>
       </div>
+      <FilePreview file={selectedFile()} />
     </div>
   )
 }

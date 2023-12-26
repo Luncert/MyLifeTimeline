@@ -12,4 +12,6 @@ public class StorageFile {
   private String name;
 
   private String mediaType;
+
+  private String path;
 }

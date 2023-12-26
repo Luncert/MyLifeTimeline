@@ -1,4 +1,4 @@
-import { createContext, createResource } from "solid-js";
+import { createContext } from "solid-js";
 import { ControlPanel } from "./ControlPanel";
 import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
 

@@ -48,7 +48,7 @@ public class StorageService {
       FileUtils.cleanDirectory(file);
     }
 
-    rootLocation = Paths.get(storagePath);
+    rootLocation = Paths.get(storagePath).toAbsolutePath();
   }
 
   public StorageFile load(String path) {
@@ -129,7 +129,7 @@ public class StorageService {
 
   private StorageFile load(Path path) {
     if (path.equals(rootLocation)) {
-      return new StorageFile("/", Constants.DIRECTORY);
+      return new StorageFile("/", Constants.DIRECTORY, "/");
     }
 
     File file = path.toFile();
@@ -144,7 +144,8 @@ public class StorageService {
     if (contentType == null) {
       contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
     }
-    return new StorageFile(fileName, contentType);
+    return new StorageFile(fileName, contentType, rootLocation.relativize(path).toString()
+        .replaceAll("\\\\", "/"));
   }
 
   private Path resolvePath(String path) {
