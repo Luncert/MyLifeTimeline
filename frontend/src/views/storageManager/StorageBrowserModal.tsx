@@ -10,16 +10,17 @@ import { useBackdrop } from "../../mgrui/lib/components/BackdropWrapper";
 
 export default function StorageBrowserModal(props: {
   open: boolean;
-  onClose: (files: StorageFile[]) => void;
+  onClose: (files: StorageFile[] | null) => void;
   accept?: string | string[];
   multiple?: boolean;
 }) {
   const backdrop = useBackdrop();
+  // TODO:
   const fileFilter: FileFilter = props.accept
     ? (f) => true
     : () => true;
 
-  const onClose = (files: StorageFile[]) => {
+  const onClose = (files: StorageFile[] | null) => {
     batch(() => {
       backdrop.hide();
       props.onClose(files);
@@ -40,7 +41,7 @@ export default function StorageBrowserModal(props: {
 
 function StorageBrowserModalElem(props: {
   filter: FileFilter;
-  onClose: (files: StorageFile[]) => void;
+  onClose: (files: StorageFile[] | null) => void;
   multiple: boolean;
 }) {
   const path = Paths.resolvePath("/");
@@ -89,10 +90,15 @@ function StorageBrowserModalElem(props: {
           </div>
         </div>
         <ButtonGroup size="small">
-          <Button variant="contained" onClick={() => props.onClose(Array.from(selectedFiles().data.values()))}>
+          <Button disabled={selectedFiles().data.size === 0} variant="contained" onClick={() => {
+            selectedFiles(files => {
+              props.onClose(Array.from(files.values()));
+              files.clear();
+            });
+          }}>
             <FaSolidCheck size={18}/>
           </Button>
-          <Button variant="contained" onClick={() => props.onClose([])}>
+          <Button variant="contained" onClick={() => props.onClose(null)}>
             <TiCancel size={20} />
           </Button>
         </ButtonGroup>

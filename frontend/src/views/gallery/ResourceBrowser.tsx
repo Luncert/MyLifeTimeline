@@ -5,16 +5,21 @@ import { createBucket, createStampedBucket, names } from "../../mgrui/lib/compon
 import { Tab, Tabs } from "../../mgrui/lib/components/navigation/Tabs";
 import StorageBrowserModal from "../storageManager/StorageBrowserModal";
 import MediaFile from "./MediaFile";
+import { useGalleryCanvas } from "./GalleryCanvas";
 
 export function ResourceBrowser(){
+  const canvas = useGalleryCanvas();
   const selectedTab = createBucket<string>("imported");
   const openStorageBrowserModal = createBucket(false);
   const importedFiles = createStampedBucket(new Set<StorageFile>());
 
-  const onCloseStorageBrowserModal = (newFiles: StorageFile[]) => {
+  const onCloseStorageBrowserModal = (selectedFiles: StorageFile[] | null) => {
     openStorageBrowserModal(false);
     importedFiles((files) => {
-      newFiles.forEach((f) => files.add(f));
+      if (selectedFiles) {
+        selectedFiles.forEach((f) => files.add(f));
+        canvas.add(...Array.from(selectedFiles.values()));
+      }
     });
   };
 

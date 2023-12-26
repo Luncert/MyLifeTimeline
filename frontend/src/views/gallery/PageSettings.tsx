@@ -10,9 +10,11 @@ export default function PageSettings() {
   const openStorageBrowserModal = createBucket(false);
   const background = createBucket<StorageFile | null>(null);
 
-  const onCloseStorageBrowserModal = (files: StorageFile[]) => {
-    background(files[0]);
-    openStorageBrowserModal(false);
+  const onCloseStorageBrowserModal = (selectedFiles: StorageFile[] | null) => {
+    if (selectedFiles) {
+      background(selectedFiles[0]);
+      openStorageBrowserModal(false);
+    }
   }
 
   createEffect(() => {

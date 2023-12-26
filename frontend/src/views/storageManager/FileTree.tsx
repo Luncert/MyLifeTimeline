@@ -132,7 +132,9 @@ export function FileTreeNode(props: {
       <Show when={isDirectory && expanded()}>
         <div class="ml-[1.4rem]">
           <For each={children()}>{f => (
-            <FileTreeNode basePath={path} file={f} isActive={props.isActive} onSelect={props.onSelect} onUnselect={props.onUnselect} />
+            <FileTreeNode basePath={path} file={f}
+              isActive={props.isActive} onSelect={props.onSelect} onUnselect={props.onUnselect}
+              enableStorageEvent={props.enableStorageEvent} />
           )}</For>
         </div>
       </Show>
