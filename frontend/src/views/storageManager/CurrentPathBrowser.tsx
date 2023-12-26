@@ -11,11 +11,13 @@ import { FiUpload } from "solid-icons/fi";
 import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import Events from "../../Events";
 import { Path } from "../../common/Paths";
+import { FiEye, FiEyeOff } from 'solid-icons/fi';
 
 export default function CurrentPathBrowser() {
   const ctx = useStorageManager();
   const createNewFolderAnchor = createBucket<HTMLElement | null>(null);
   const newFolderName = createBucket("");
+  const enablePreview = createBucket(false);
   let inputEl: HTMLSpanElement;
 
   const [files, filesAction] = createResource(
@@ -102,6 +104,10 @@ export default function CurrentPathBrowser() {
             />
             <span ref={el => inputEl = el} class="hidden"></span>
           </label>
+
+          <Button onClick={() => enablePreview((prev) => !prev)}>
+            { enablePreview() ? <FiEye size={16} /> : <FiEyeOff size={16} /> }
+          </Button>
           <Button onClick={() => ctx.backward()}>
             <IoArrowBackOutline />
           </Button>
