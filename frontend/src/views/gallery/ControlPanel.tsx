@@ -57,7 +57,7 @@ export function ControlPanel(){
   return (
     <div class={names("absolute top-[30px] w-[20%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
       collapsed() ? "-translate-x-full" : "translate-x-[0px]")}>
-      <div class="flex flex-col relative w-full h-full">
+      <div class="flex flex-col relative w-full h-full overflow-hidden">
         <div class="h-10 leading-10 px-2 align-middle font-semibold text-zinc-600">{views[selectedMenu()].name}</div>
         <div class={names("absolute flex flex-row-reverse shrink-0 top-0 bg-white",
           "rounded-md transition-all z-10",
@@ -74,8 +74,10 @@ export function ControlPanel(){
             </Switch>
           </IconButton>
         </div>
+
         <Divider />
-        <div class="flex w-full h-full shrink">
+
+        <div class="relative flex w-full h-full shrink">
           <ToggleButtonGroup class="p-1" color="info" exclusive orientation="vertical"
             value={selectedMenu()}
             onChange={(evt, v) => selectedMenu(v)}
@@ -91,8 +93,10 @@ export function ControlPanel(){
             )}
             </For>
           </ToggleButtonGroup>
+
           <Divider orientation="vertical" />
-          <div class="w-full h-full shrink">
+
+          <div class="w-full h-full shrink overflow-hidden">
             <For each={Object.keys(views)}>{viewName => (
               <div class={selectedMenu() === viewName ? "block" : "hidden"}>
                 <Dynamic component={views[viewName].view} />
