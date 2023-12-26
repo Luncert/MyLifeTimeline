@@ -10,14 +10,16 @@ export default function MediaFile(props: {
   const [local, others] = splitProps(props, ['file', "class", "elemWidth"]);
   const src = getBackend().getFileUrl(props.file);
   return (
-    <div class={names("relative drop-shadow rounded-md overflow-hidden w-max h-max", local.class || "")}
+    <div class={names("relative drop-shadow rounded-md overflow-hidden", local.class || "")}
       {...others}>
       <Switch>
         <Match when={local.file.mediaType.startsWith("image")}>
-          <img width={local.elemWidth || 300} class="select-none" draggable={false} src={src} />
+          <img class="select-none" draggable={false} src={src}
+            style={{ "object-fit": "cover" }} />
         </Match>
         <Match when={local.file.mediaType.startsWith("video")}>
-          <video width={local.elemWidth || 300} class="select-none">
+          <video width={local.elemWidth || 300} class="select-none"
+            style={{ "object-fit": "contain" }}>
             <source src={src} />
           </video>
         </Match>

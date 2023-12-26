@@ -55,6 +55,10 @@ declare global {
     name: string;
     mediaType: string;
     path: string;
+    creationTime: number;
+    lastAccessTime: number;
+    lastModifiedTime: number;
+    size: string;
   }
 
   type FileFilter = (file: StorageFile) => boolean;

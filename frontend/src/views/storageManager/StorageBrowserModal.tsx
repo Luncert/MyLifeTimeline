@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Paper, Typography } from "@suid/material";
-import { For, JSX, createEffect, createResource } from "solid-js";
+import { For, JSX, batch, createEffect, createResource } from "solid-js";
 import { createStampedBucket } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
 import Paths from "../../common/Paths";
@@ -9,7 +9,7 @@ import { TiCancel } from 'solid-icons/ti';
 import { useBackdrop } from "../../mgrui/lib/components/BackdropWrapper";
 
 export default function StorageBrowserModal(props: {
-  open: Bucket<boolean>;
+  open: boolean;
   onClose: (files: StorageFile[]) => void;
   accept?: string | string[];
   multiple?: boolean;
@@ -20,17 +20,17 @@ export default function StorageBrowserModal(props: {
     : () => true;
 
   const onClose = (files: StorageFile[]) => {
-    props.open(false);
-    props.onClose(files);
+    batch(() => {
+      backdrop.hide();
+      props.onClose(files);
+    });
   };
 
   createEffect(() => {
-    if (props.open()) {
+    if (props.open) {
       backdrop.show({
         elem: () => (<StorageBrowserModalElem filter={fileFilter} onClose={onClose} multiple={props.multiple === true} />)
       });
-    } else {
-      backdrop.hide();
     }
   })
 

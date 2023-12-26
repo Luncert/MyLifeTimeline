@@ -136,7 +136,7 @@ export default function CurrentPathBrowser() {
           )}</For>
         </div>
       </div>
-      <FilePreview file={selectedFile()} />
+      <FilePreview file={selectedFile()} onClose={() => selectedFile(null)} />
     </div>
   )
 }

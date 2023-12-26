@@ -28,7 +28,7 @@ export default function PageSettings() {
         <Typography class="overflow-hidden whitespace-nowrap text-ellipsis">{background()?.name || ""}</Typography>
         <Button onClick={() => openModal(true)}>select</Button>
       </Stack>
-      <StorageBrowserModal open={openModal} onClose={(files) => background(files[0])}/>
+      <StorageBrowserModal open={openModal()} onClose={(files) => background(files[0])}/>
     </div>
   )
 }
