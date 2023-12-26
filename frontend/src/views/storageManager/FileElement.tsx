@@ -24,7 +24,9 @@ export default function FileElement(props: {
     }}>
       <MediaResourceIcon mediaType={props.file.mediaType} class="text-5xl" />
       <div class="absolute top-3/4 w-full h-max">
-        <Typography class="text-zinc-900 break-all">{props.file.name}</Typography>
+        <Typography class="break-all" sx={{
+          color: (t) => t.palette.mode === "dark" ? "#e4e4e7" : "#18181b"
+        }}>{props.file.name}</Typography>
       </div>
     </IconButton>
   )

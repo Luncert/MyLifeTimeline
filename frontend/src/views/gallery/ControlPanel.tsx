@@ -1,4 +1,4 @@
-import { Divider, IconButton, ToggleButton, ToggleButtonGroup } from "@suid/material";
+import { Divider, IconButton, Paper, ToggleButton, ToggleButtonGroup } from "@suid/material";
 import { For, Match, Switch, ValidComponent, onMount } from "solid-js";
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand  } from 'solid-icons/tb';
 import { createBucket, names, removeElementsFromArray } from "../../mgrui/lib/components/utils";
@@ -11,6 +11,7 @@ import PageSettings from "./PageSettings";
 import Events from "../../Events";
 import { BiSolidComponent } from "solid-icons/bi";
 import ComponentBrowser from "../../control/ComponentBrowser";
+import { StyledDiv } from "../../mgrui/lib/components/Styled";
 
 interface ControlPanelView {
   name: string;
@@ -55,11 +56,11 @@ export function ControlPanel(){
   });
 
   return (
-    <div class={names("absolute top-[30px] w-[20%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-md transition-all",
+    <div class={names("absolute top-[30px] w-[20%] h-[calc(100%-60px)] bg-white drop-shadow rounded-r-lg transition-all",
       collapsed() ? "-translate-x-full" : "translate-x-[0px]")}>
-      <div class="flex flex-col relative w-full h-full overflow-hidden">
+      <Paper square class="flex flex-col relative w-full h-full rounded-r-md">
         <div class="h-10 leading-10 px-2 align-middle font-semibold text-zinc-600">{views[selectedMenu()].name}</div>
-        <div class={names("absolute flex flex-row-reverse shrink-0 top-0 bg-white",
+        <div class={names("absolute flex flex-row-reverse shrink-0 top-0",
           "rounded-md transition-all z-10",
           collapsed() ? "-right-10" : "right-0")}>
           <IconButton color="primary"
@@ -105,7 +106,7 @@ export function ControlPanel(){
             </For>
           </div>
         </div>
-      </div>
+      </Paper>
     </div>
   )
 }

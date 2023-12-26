@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Typography } from "@suid/material";
+import { Button, ButtonGroup, Paper, Typography } from "@suid/material";
 import { For, JSX, createEffect, createResource } from "solid-js";
 import { createStampedBucket } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
@@ -54,7 +54,7 @@ function StorageBrowserModalElem(props: {
   let selectedFileScroll: HTMLDivElement;
 
   return (
-    <div class="relative drop-shadow w-1/2 h-2/3 rounded-lg bg-white
+    <Paper square class="relative drop-shadow w-1/2 h-2/3 rounded-lg bg-white
       flex flex-col p-2">
       <For each={files()}>{f => (
         <FileTreeNode basePath={path} file={f} filter={props.filter}
@@ -99,7 +99,7 @@ function StorageBrowserModalElem(props: {
           </Button>
         </ButtonGroup>
       </div>
-    </div>
+    </Paper>
   );
 }
 

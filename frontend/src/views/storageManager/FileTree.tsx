@@ -40,7 +40,7 @@ export default function FileTree() {
 
   return (
     <div class="flex flex-col gap-1 p-1 w-1/3">
-      {/* <TextField class="w-full" size="small" autoComplete="none" InputProps={{
+      {/* <TextField class="w-full" size="small" autoComplete="off" InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             <IconButton edge="end" sx={{ borderRadius: 2 }}>

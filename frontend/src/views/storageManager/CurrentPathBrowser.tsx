@@ -71,7 +71,7 @@ export default function CurrentPathBrowser() {
               horizontal: "left",
             }}
           >
-            <TextField size="small" autoComplete="none" value={newFolderName()}
+            <TextField size="small" autoComplete="off" value={newFolderName()}
               onChange={(evt, v) => newFolderName(v)}
               InputProps={{
                 endAdornment: (

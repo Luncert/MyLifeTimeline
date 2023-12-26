@@ -19,11 +19,12 @@ export default function PageSettings() {
   });
 
   return (
-    <div class="flex flex-col w-full h-full p-2 gap-1">
-      <div class="w-full">
-        <TextField class="w-full" label="Title" size="small"  autoComplete="none"
-          value={canvas.title()} onChange={(evt, v) => canvas.title(v)} />
-      </div>
+    <div class="flex flex-col w-full h-full p-2 gap-2">
+      <TextField fullWidth label="Title" size="small" autoComplete="off"
+        value={canvas.title()} onChange={(evt, v) => canvas.title(v)} />
+      <TextField fullWidth label="Description" size="small" autoComplete="off"
+        multiline minRows={4}
+        value={canvas.title()} onChange={(evt, v) => canvas.title(v)} />
       <Stack class="items-center" direction="row" spacing={1}>
         <Typography>Background:</Typography>
         <Typography class="overflow-hidden whitespace-nowrap text-ellipsis">{background()?.name || ""}</Typography>

@@ -1,4 +1,4 @@
-import { Divider } from "@suid/material";
+import { Divider, Paper } from "@suid/material";
 import HomeSidebar, { Entry } from "./HomeSidebar";
 import { createBucket } from "./mgrui/lib/components/utils";
 import { FaSolidFolderClosed } from 'solid-icons/fa';
@@ -28,8 +28,7 @@ const entries: {[k: string]: EntryWithContent} = {
 export default function Home() {
   const activeEntry = createBucket("gallery");
   return (
-    <div class="relative w-full h-full
-      flex">
+    <Paper square class="relative w-full h-full flex">
       <HomeSidebar activeEntry={activeEntry} entries={entries} />
       <Divider orientation="vertical" />
       <div class="w-full h-full shrink">
@@ -41,6 +40,6 @@ export default function Home() {
           </div>
         )}</For>
       </div>
-    </div>
+    </Paper>
   )
 }
