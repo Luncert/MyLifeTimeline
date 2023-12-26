@@ -25,9 +25,8 @@ export default function GalleryCanvas(){
       description,
       background
     }}>
-      <div class="w-full h-full" style={{
-        "background-size": "cover",
-        background: background() !== null ? `url(${background()}) no-repeat center center fixed` : undefined,
+      <div class="w-full h-full bg-cover" style={{
+        "background-image": background() !== null ? `url(${background()})` : undefined,
       }}>
         <ControlPanel />
       </div>

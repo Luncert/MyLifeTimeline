@@ -5,6 +5,7 @@ import { useGalleryCanvas } from "./GalleryCanvas";
 import { createEffect } from "solid-js";
 import getBackend from "../../service/Backend";
 import Paths from "../../common/Paths";
+import config from "../../service/config";
 
 export default function PageSettings() {
   const canvas = useGalleryCanvas();
@@ -13,15 +14,7 @@ export default function PageSettings() {
   createEffect(() => {
     const file = background();
     if (file !== null) {
-      getBackend().getBinary(Paths.resolvePath(file.path))
-        .then((v) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(v);
-          reader.onload = () => {
-            canvas.background(reader.result as string);
-            console.log(reader.result)
-          }
-        });
+      canvas.background(`${config.backend.endpoint}/storage/${file.path}`);
     }
   });
 

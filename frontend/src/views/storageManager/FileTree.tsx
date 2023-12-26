@@ -73,7 +73,8 @@ export function FileTreeNode(props: {
   const load = () => {
     getBackend().listFiles(path)
       .then((files) => {
-        files.forEach(f => f.path = props.basePath.resolve(props.file.name + "/" + f.name).toString());
+        files.forEach(f => f.path = props.basePath.resolve(
+          encodeURIComponent(props.file.name) + "/" + encodeURIComponent(f.name)).toString());
         children(props.filter ? files.filter(props.filter) : files);
       });
   };

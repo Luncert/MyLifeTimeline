@@ -46,7 +46,7 @@ function StorageBrowserModalElem(props: {
   const [files] = createResource(
     () => getBackend().listFiles(Paths.resolvePath("/"))
       .then(files => {
-        files.forEach(f => f.path = path.resolve(f.name).toString());
+        files.forEach(f => f.path = path.resolve(encodeURIComponent(f.name)).toString());
         return files.filter(props.filter);
       }),
     { initialValue: [] as StorageFile[]});
