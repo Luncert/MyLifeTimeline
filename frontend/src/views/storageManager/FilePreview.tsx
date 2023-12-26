@@ -23,7 +23,8 @@ export default function FilePreview(props: {
   createEffect(() => {
     if (props.file !== null) {
       backdrop.show({
-        elem: () => (<FilePreviewElem file={file()} onClose={onClose} />)
+        elem: () => (<FilePreviewElem file={file()} onClose={onClose} />),
+        onClose,
       });
     }
   })

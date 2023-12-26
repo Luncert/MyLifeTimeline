@@ -29,7 +29,8 @@ export default function StorageBrowserModal(props: {
   createEffect(() => {
     if (props.open) {
       backdrop.show({
-        elem: () => (<StorageBrowserModalElem filter={fileFilter} onClose={onClose} multiple={props.multiple === true} />)
+        elem: () => (<StorageBrowserModalElem filter={fileFilter} onClose={onClose} multiple={props.multiple === true} />),
+        onClose,
       });
     }
   })
