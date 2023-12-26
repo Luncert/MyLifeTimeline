@@ -7,8 +7,14 @@ import getBackend from "../../service/Backend";
 
 export default function PageSettings() {
   const canvas = useGalleryCanvas();
-  const openModal = createBucket(false);
+  const openStorageBrowserModal = createBucket(false);
   const background = createBucket<StorageFile | null>(null);
+
+  const onCloseStorageBrowserModal = (files: StorageFile[]) => {
+    background(files[0]);
+    openStorageBrowserModal(false);
+  }
+
   createEffect(() => {
     const file = background();
     if (file !== null) {
@@ -26,9 +32,9 @@ export default function PageSettings() {
       <Stack class="items-center" direction="row" spacing={1}>
         <Typography>Background:</Typography>
         <Typography class="overflow-hidden whitespace-nowrap text-ellipsis">{background()?.name || ""}</Typography>
-        <Button onClick={() => openModal(true)}>select</Button>
+        <Button onClick={() => openStorageBrowserModal(true)}>select</Button>
       </Stack>
-      <StorageBrowserModal open={openModal()} onClose={(files) => background(files[0])}/>
+      <StorageBrowserModal open={openStorageBrowserModal()} onClose={onCloseStorageBrowserModal}/>
     </div>
   )
 }

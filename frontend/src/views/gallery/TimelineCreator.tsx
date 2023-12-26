@@ -3,7 +3,7 @@ import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
 import { createDomEventRegistry, globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
-import { ControlPanel } from "./ControlPanel";
+import { GalleryCanvasControl } from "./GalleryCanvasControl";
 import Events from "../../Events";
 
 interface TimelineCreatorContextDef {
@@ -73,7 +73,7 @@ export default function TimelineCreator() {
           </Show>
         </div>
         <ResourceCanvas />
-        <ControlPanel />
+        <GalleryCanvasControl />
       </div>
     </TimelineCreatorContext.Provider>
   )

@@ -1,6 +1,6 @@
-import { Button, ButtonGroup, Paper, Typography } from "@suid/material";
+import { Button, ButtonGroup, Paper, Typography, useTheme } from "@suid/material";
 import { For, JSX, batch, createEffect, createResource } from "solid-js";
-import { createStampedBucket } from "../../mgrui/lib/components/utils";
+import { createStampedBucket, names } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
 import Paths from "../../common/Paths";
 import getBackend from "../../service/Backend";
@@ -105,8 +105,10 @@ function Capsule(props: {
   onDelete: Callback;
   children: JSX.Element;
 }) {
+  const theme = useTheme();
   return (
-    <div class="flex inline-block w-max h-full p-1 rounded-md bg-sky-100 shadow-md">
+    <div class={names("flex inline-block w-max h-full p-1 rounded-md shadow-md",
+      theme.palette.mode === "dark" ? "bg-sky-700" : "bg-sky-100")}>
       <Typography color="info" class="px-1">{props.children}</Typography>
       {/* <IconButton size="small" color="error" onClick={props.onDelete}>
         <ImCross size={14} />

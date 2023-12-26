@@ -1,5 +1,5 @@
 import { createContext } from "solid-js";
-import { ControlPanel } from "./ControlPanel";
+import { GalleryCanvasControl } from "./GalleryCanvasControl";
 import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
 
 interface GalleryCanvasContextDef {
@@ -28,7 +28,7 @@ export default function GalleryCanvas(){
       <div class="w-full h-full bg-cover" style={{
         "background-image": background() !== null ? `url(${background()})` : undefined,
       }}>
-        <ControlPanel />
+        <GalleryCanvasControl />
       </div>
     </GalleryCanvasContext.Provider>
   )

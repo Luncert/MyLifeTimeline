@@ -50,7 +50,7 @@ export default function FileTree() {
         )
       }} /> */}
       <For each={files()}>{f => (
-        <FileTreeNode basePath={path} file={f} />
+        <FileTreeNode basePath={path} file={f} enableStorageEvent />
       )}</For>
     </div>
   )
@@ -63,6 +63,7 @@ export function FileTreeNode(props: {
   isActive?: (f: StorageFile) => boolean;
   onSelect?: Consumer<StorageFile>;
   onUnselect?: Consumer<StorageFile>;
+  enableStorageEvent?: boolean;
 }) {
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
@@ -89,21 +90,25 @@ export function FileTreeNode(props: {
       }
     }
     
-    globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.Select, {
-      detail: {
-        file: props.file
-      }
-    }));
+    if (props.enableStorageEvent) {
+      globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.Select, {
+        detail: {
+          file: props.file
+        }
+      }));
+    }
   };
 
-  onMount(() => {
-    globalCustomEventRegistry.on(Events.Storage.Upload, (evt) => {
-      const p = evt.detail.path as Path;
-      if (p.isChildOf(path)) {
-        load();
-      }
+  if (props.enableStorageEvent) {
+    onMount(() => {
+      globalCustomEventRegistry.on(Events.Storage.Upload, (evt) => {
+        const p = evt.detail.path as Path;
+        if (p.isChildOf(path)) {
+          load();
+        }
+      });
     });
-  });
+  }
 
   return (
     <div>
