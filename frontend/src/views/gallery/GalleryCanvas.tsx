@@ -1,7 +1,6 @@
 import { createContext, createResource } from "solid-js";
 import { ControlPanel } from "./ControlPanel";
 import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
-import getBackend from "../../service/Backend";
 
 interface GalleryCanvasContextDef {
   title: Bucket<string>;
@@ -27,7 +26,8 @@ export default function GalleryCanvas(){
       background
     }}>
       <div class="w-full h-full" style={{
-        background: background() !== null ? `url(${background()})` : undefined
+        "background-size": "cover",
+        background: background() !== null ? `url(${background()}) no-repeat center center fixed` : undefined,
       }}>
         <ControlPanel />
       </div>

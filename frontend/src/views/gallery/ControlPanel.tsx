@@ -7,7 +7,7 @@ import { ResourceBrowser } from "../../control/ResourceBrowser";
 import { Dynamic } from "solid-js/web";
 import { OcFiledirectoryopenfill2 } from 'solid-icons/oc';
 import { RiSystemSettings3Fill } from 'solid-icons/ri';
-import PageSettings from "../../control/PageSettings";
+import PageSettings from "./PageSettings";
 import Events from "../../Events";
 import { BiSolidComponent } from "solid-icons/bi";
 import ComponentBrowser from "../../control/ComponentBrowser";
@@ -19,16 +19,16 @@ interface ControlPanelView {
 }
 
 const views: {[k: string]: ControlPanelView} = {
-  resourceManager: {
-    name: "Resource Manager",
-    icon: OcFiledirectoryopenfill2,
-    view: ResourceBrowser
-  },
-  componentBrowser: {
-    name: "Components",
-    icon: BiSolidComponent,
-    view: ComponentBrowser
-  },
+  // resourceManager: {
+  //   name: "Resource Manager",
+  //   icon: OcFiledirectoryopenfill2,
+  //   view: ResourceBrowser
+  // },
+  // componentBrowser: {
+  //   name: "Components",
+  //   icon: BiSolidComponent,
+  //   view: ComponentBrowser
+  // },
   pageSettings: {
     name: "Page Settings",
     icon: RiSystemSettings3Fill,

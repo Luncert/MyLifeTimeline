@@ -27,6 +27,8 @@ declare global {
     to: Pos;
   }
 
+  type VoidCall = () => void;
+
   type Callback = (...args: any) => any;
 
   type Supplier<T> = () => T;

@@ -35,7 +35,7 @@ function Show() {
 
 function Edit() {
   return (
-    <div id="gallery-with-timeline-edit">
+    <div id="gallery-with-timeline-edit" class="w-full h-full">
       <GalleryCanvas />
     </div>
   );

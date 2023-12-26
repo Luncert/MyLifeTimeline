@@ -1,10 +1,10 @@
 import { Button, Stack, TextField, Typography } from "@suid/material";
-import { createBucket } from "../mgrui/lib/components/utils";
-import StorageBrowserModal from "../views/storageManager/StorageBrowserModal";
-import { useGalleryCanvas } from "../views/gallery/GalleryCanvas";
+import { createBucket } from "../../mgrui/lib/components/utils";
+import StorageBrowserModal from "../storageManager/StorageBrowserModal";
+import { useGalleryCanvas } from "./GalleryCanvas";
 import { createEffect } from "solid-js";
-import getBackend from "../service/Backend";
-import Paths from "../common/Paths";
+import getBackend from "../../service/Backend";
+import Paths from "../../common/Paths";
 
 export default function PageSettings() {
   const canvas = useGalleryCanvas();
@@ -15,8 +15,12 @@ export default function PageSettings() {
     if (file !== null) {
       getBackend().getBinary(Paths.resolvePath(file.path))
         .then((v) => {
-          const decoder = new TextDecoder("utf8");
-          canvas.background(btoa(decoder.decode(v)));
+          const reader = new FileReader();
+          reader.readAsDataURL(v);
+          reader.onload = () => {
+            canvas.background(reader.result as string);
+            console.log(reader.result)
+          }
         });
     }
   });

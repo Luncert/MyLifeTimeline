@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Typography } from "@suid/material";
 import { For, JSX, createEffect, createResource } from "solid-js";
-import { createStampedUpdateBucket } from "../../mgrui/lib/components/utils";
+import { createStampedBucket } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
 import Paths from "../../common/Paths";
 import getBackend from "../../service/Backend";
@@ -27,7 +27,7 @@ export default function StorageBrowserModal(props: {
   createEffect(() => {
     if (props.open()) {
       backdrop.show({
-        elem: () => (<StorageBrowserModalElem filter={fileFilter} onClose={onClose} />)
+        elem: () => (<StorageBrowserModalElem filter={fileFilter} onClose={onClose} multiple={props.multiple === true} />)
       });
     } else {
       backdrop.hide();
@@ -40,20 +40,36 @@ export default function StorageBrowserModal(props: {
 function StorageBrowserModalElem(props: {
   filter: FileFilter;
   onClose: (files: StorageFile[]) => void;
+  multiple: boolean;
 }) {
   const path = Paths.resolvePath("/");
   const [files] = createResource(
     () => getBackend().listFiles(Paths.resolvePath("/"))
-      .then(files => files.filter(props.filter)),
+      .then(files => {
+        files.forEach(f => f.path = path.resolve(f.name).toString());
+        return files.filter(props.filter);
+      }),
     { initialValue: [] as StorageFile[]});
-  const selectedFiles = createStampedUpdateBucket<Set<StorageFile>>(new Set());
+  const selectedFiles = createStampedBucket<Set<StorageFile>>(new Set());
   let selectedFileScroll: HTMLDivElement;
 
   return (
     <div class="relative drop-shadow w-1/2 h-2/3 rounded-lg bg-white
       flex flex-col p-2">
       <For each={files()}>{f => (
-        <FileTreeNode basePath={path} file={f} filter={props.filter} selectedFiles={selectedFiles} />
+        <FileTreeNode basePath={path} file={f} filter={props.filter}
+          isActive={f => selectedFiles().data.has(f)}
+          onSelect={(f) => {
+            selectedFiles(files => {
+              if (!props.multiple) {
+                files.clear();
+              }
+              files.add(f);
+            })
+          }}
+          onUnselect={(f) => {
+            selectedFiles(files => files.delete(f));
+          }} />
       )}</For>
       <div class="flex mt-auto w-full gap-1">
         <div ref={el => selectedFileScroll = el}
@@ -69,7 +85,6 @@ function StorageBrowserModalElem(props: {
               <Capsule onDelete={() => {
                 selectedFiles(files => {
                   files.delete(f);
-                  return files;
                 });
               }}>{f.name}</Capsule>
             )}</For>

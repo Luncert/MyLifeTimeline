@@ -1,6 +1,6 @@
 import { Button, IconButton, InputAdornment, TextField } from "@suid/material";
 import { BiRegularSearchAlt } from "solid-icons/bi";
-import { For, Show, createEffect, createResource, onMount, useContext } from "solid-js";
+import { Accessor, For, Show, batch, createEffect, createMemo, createResource, onMount, useContext } from "solid-js";
 import { createBucket } from "../../mgrui/lib/components/utils";
 import { FaSolidAngleDown, FaSolidAngleRight } from "solid-icons/fa";
 import { IoFolder, IoFolderOpen } from "solid-icons/io";
@@ -60,9 +60,10 @@ export function FileTreeNode(props: {
   basePath: Path;
   file: StorageFile;
   filter?: FileFilter;
-  selectedFiles?: StampedBucket<Set<StorageFile>>;
+  isActive?: (f: StorageFile) => boolean;
+  onSelect?: Consumer<StorageFile>;
+  onUnselect?: Consumer<StorageFile>;
 }) {
-  const selected = createBucket(false);
   const storage = useContext(StorageManagerContext);
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
@@ -72,6 +73,7 @@ export function FileTreeNode(props: {
   const load = () => {
     getBackend().listFiles(path)
       .then((files) => {
+        files.forEach(f => f.path = props.basePath.resolve(props.file.name + "/" + f.name).toString());
         children(props.filter ? files.filter(props.filter) : files);
       });
   };
@@ -87,7 +89,7 @@ export function FileTreeNode(props: {
 
   return (
     <div>
-      <Button fullWidth color={selected() ? "primary" : "inherit"} size="small" startIcon={
+      <Button fullWidth color={props.isActive?.(props.file) ? "primary" : "inherit"} size="small" startIcon={
         <div class="inline-block flex gap-1">
           <Show when={isDirectory} fallback={<MediaResourceIcon mediaType={props.file.mediaType} />}>
             <Show when={expanded()} fallback={
@@ -109,18 +111,10 @@ export function FileTreeNode(props: {
             load();
           }
         } else {
-          if (props.selectedFiles) {
-            if (selected(!selected())) {
-              props.selectedFiles(files => {
-                files.add(props.file);
-                return files;
-              });
-            } else {
-              props.selectedFiles(files => {
-                files.delete(props.file);
-                return files;
-              });
-            }
+          if (props.isActive?.(props.file)) {
+            props.onUnselect?.(props.file);
+          } else {
+            props.onSelect?.(props.file);
           }
         }
       }}>
@@ -129,7 +123,7 @@ export function FileTreeNode(props: {
       <Show when={isDirectory && expanded()}>
         <div class="ml-[1.4rem]">
           <For each={children()}>{f => (
-            <FileTreeNode basePath={path} file={f} selectedFiles={props.selectedFiles} />
+            <FileTreeNode basePath={path} file={f} isActive={props.isActive} onSelect={props.onSelect} onUnselect={props.onUnselect} />
           )}</For>
         </div>
       </Show>

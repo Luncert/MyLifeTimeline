@@ -15,9 +15,9 @@ const colors = {
 
 class Backend {
 
-  public async getBinary(path: Path): Promise<ArrayBuffer> {
+  public async getBinary(path: Path) {
     return axios.get(`/storage/${path}`, {
-      responseType: "arraybuffer"
+      responseType: "blob"
     }).then((rep) => {
       return rep.data;
     });
