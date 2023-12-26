@@ -1,8 +1,8 @@
-import { For, createContext } from "solid-js";
+import { For, ValidComponent, createContext } from "solid-js";
 import { GalleryCanvasControl } from "./GalleryCanvasControl";
 import { createBucket, createStampedBucket, useCtx } from "../../mgrui/lib/components/utils";
-import InteractElement from "../../control/component/InteractElement";
 import MediaFile from "./MediaFile";
+import InteractElement from "./InteractElement";
 
 interface GalleryCanvasContextDef {
   title: Bucket<string>;
@@ -39,9 +39,7 @@ export default function GalleryCanvas(){
       }}>
         <GalleryCanvasControl />
         <For each={importedFiles().data}>{file => (
-          <InteractElement draggable>
-            <MediaFile class="w-64" file={file} />
-          </InteractElement>
+          <InteractElement component={MediaFile} class="w-64" file={file} />
         )}</For>
       </div>
     </GalleryCanvasContext.Provider>
