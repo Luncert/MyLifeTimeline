@@ -9,12 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.luncert.mylifetimeline.base.Constants;
 import org.luncert.mylifetimeline.exception.StorageException;
 import org.luncert.mylifetimeline.exception.InvalidPathException;
@@ -103,7 +103,7 @@ public class StorageService {
 
   public void store(String path, MultipartFile file) {
     try {
-      if (file.isEmpty()) {
+      if (file.isEmpty() || file.getOriginalFilename() == null) {
         throw new StorageException("Failed to store empty file.");
       }
 
@@ -129,7 +129,11 @@ public class StorageService {
 
   private StorageFile load(Path path) {
     if (path.equals(rootLocation)) {
-      return new StorageFile("/", Constants.DIRECTORY, "/");
+      return StorageFile.builder()
+          .name("/")
+          .mediaType(Constants.DIRECTORY)
+          .path("/")
+          .build();
     }
 
     File file = path.toFile();
@@ -144,8 +148,21 @@ public class StorageService {
     if (contentType == null) {
       contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
     }
-    return new StorageFile(fileName, contentType, rootLocation.relativize(path).toString()
-        .replaceAll("\\\\", "/"));
+    try {
+      BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+      return StorageFile.builder()
+          .name(fileName)
+          .mediaType(contentType)
+          .path(rootLocation.relativize(path).toString()
+              .replaceAll("\\\\", "/"))
+          .creationTime(attr.creationTime().toMillis())
+          .lastAccessTime(attr.lastAccessTime().toMillis())
+          .lastModifiedTime(attr.lastModifiedTime().toMillis())
+          .size(FileUtils.byteCountToDisplaySize(FileUtils.sizeOf(file)))
+          .build();
+    } catch (IOException e) {
+      throw new InvalidPathException("Cannot read file attributes: " + file);
+    }
   }
 
   private Path resolvePath(String path) {
