@@ -52,6 +52,7 @@ declare global {
   interface StorageFile {
     name: string;
     mediaType: string;
+    path: string;
   }
 
   type FileFilter = (file: StorageFile) => boolean;
