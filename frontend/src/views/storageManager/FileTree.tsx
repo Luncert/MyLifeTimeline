@@ -60,7 +60,7 @@ export function FileTreeNode(props: {
   basePath: Path;
   file: StorageFile;
   filter?: FileFilter;
-  selectedFilesUpdater?: BucketUpdater<Set<StorageFile>>;
+  selectedFiles?: StampedBucket<Set<StorageFile>>;
 }) {
   const selected = createBucket(false);
   const storage = useContext(StorageManagerContext);
@@ -109,10 +109,18 @@ export function FileTreeNode(props: {
             load();
           }
         } else {
-          if (selected(!selected())) {
-            props.selectedFilesUpdater?.(files => files.add(props.file));
-          } else {
-            props.selectedFilesUpdater?.(files => files.delete(props.file));
+          if (props.selectedFiles) {
+            if (selected(!selected())) {
+              props.selectedFiles(files => {
+                files.add(props.file);
+                return files;
+              });
+            } else {
+              props.selectedFiles(files => {
+                files.delete(props.file);
+                return files;
+              });
+            }
           }
         }
       }}>
@@ -121,7 +129,7 @@ export function FileTreeNode(props: {
       <Show when={isDirectory && expanded()}>
         <div class="ml-[1.4rem]">
           <For each={children()}>{f => (
-            <FileTreeNode basePath={path} file={f} selectedFilesUpdater={props.selectedFilesUpdater} />
+            <FileTreeNode basePath={path} file={f} selectedFiles={props.selectedFiles} />
           )}</For>
         </div>
       </Show>

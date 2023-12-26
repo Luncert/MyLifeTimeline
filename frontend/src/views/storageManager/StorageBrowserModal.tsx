@@ -46,14 +46,15 @@ function StorageBrowserModalElem(props: {
     () => getBackend().listFiles(Paths.resolvePath("/"))
       .then(files => files.filter(props.filter)),
     { initialValue: [] as StorageFile[]});
-  const [selectedFiles, selectedFilesUpdater] = createStampedUpdateBucket<Set<StorageFile>>(new Set());
+  const selectedFiles = createStampedUpdateBucket<Set<StorageFile>>(new Set());
   let selectedFileScroll: HTMLDivElement;
+  createEffect(() => console.log(selectedFiles()))
 
   return (
     <div class="relative drop-shadow w-1/2 h-2/3 rounded-lg bg-white
       flex flex-col p-2">
       <For each={files()}>{f => (
-        <FileTreeNode basePath={path} file={f} filter={props.filter} selectedFilesUpdater={selectedFilesUpdater} />
+        <FileTreeNode basePath={path} file={f} filter={props.filter} selectedFiles={selectedFiles} />
       )}</For>
       <div class="flex mt-auto w-full gap-1">
         <div ref={el => selectedFileScroll = el}
@@ -67,7 +68,10 @@ function StorageBrowserModalElem(props: {
           <div class="flex gap-1 w-max">
             <For each={Array.from(selectedFiles().values())}>{(f) => (
               <Capsule onDelete={() => {
-                selectedFilesUpdater(files => files.delete(f));
+                selectedFiles(files => {
+                  files.delete(f);
+                  return files;
+                });
               }}>{f.name}</Capsule>
             )}</For>
           </div>
