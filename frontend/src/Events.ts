@@ -5,6 +5,7 @@ export default {
   AddComponent: "TimeilneCreator:AddComponent",
   Storage: {
     Upload: "Storage:Upload",
-    ChangeWorkDir: "Storage:ChangeWorkDir"
+    ChangeWorkDir: "Storage:ChangeWorkDir",
+    Select: "Storage:Select"
   }
 }

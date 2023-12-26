@@ -64,7 +64,6 @@ export function FileTreeNode(props: {
   onSelect?: Consumer<StorageFile>;
   onUnselect?: Consumer<StorageFile>;
 }) {
-  const storage = useContext(StorageManagerContext);
   const expanded = createBucket(false);
   const isDirectory = props.file.mediaType === "directory";
   const children = createBucket<StorageFile[] | null>(null);
@@ -73,6 +72,28 @@ export function FileTreeNode(props: {
   const load = () => {
     getBackend().listFiles(path)
       .then((files) => children(props.filter ? files.filter(props.filter) : files));
+  };
+
+  const onClick = () => {
+    if (isDirectory) {
+      expanded(!expanded());
+      // load the first time
+      if (!children()) {
+        load();
+      }
+    } else {
+      if (props.isActive?.(props.file)) {
+        props.onUnselect?.(props.file);
+      } else {
+        props.onSelect?.(props.file);
+      }
+    }
+    
+    globalCustomEventRegistry.dispatch(new CustomEvent(Events.Storage.Select, {
+      detail: {
+        file: props.file
+      }
+    }));
   };
 
   onMount(() => {
@@ -100,21 +121,7 @@ export function FileTreeNode(props: {
             </Show>
           </Show>
         </div>
-      } sx={{justifyContent: "start", textTransform: "none"}} onClick={() => {
-        if (isDirectory) {
-          expanded(!expanded());
-          storage?.open(path);
-          if (!children()) {
-            load();
-          }
-        } else {
-          if (props.isActive?.(props.file)) {
-            props.onUnselect?.(props.file);
-          } else {
-            props.onSelect?.(props.file);
-          }
-        }
-      }}>
+      } sx={{justifyContent: "start", textTransform: "none"}} onClick={onClick}>
         <span class="whitespace-nowrap text-ellipsis overflow-hidden">{props.file.name}</span>
       </Button>
       <Show when={isDirectory && expanded()}>

@@ -10,12 +10,12 @@ import { useStorageManager } from "./StorageManager";
 import { FiUpload } from "solid-icons/fi";
 import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import Events from "../../Events";
-import { Path } from "../../common/Paths";
+import Paths, { Path } from "../../common/Paths";
 import { FiEye, FiEyeOff } from 'solid-icons/fi';
 import FilePreview from "./FilePreview";
 
 export default function CurrentPathBrowser() {
-  const ctx = useStorageManager();
+  const storage = useStorageManager();
   const createNewFolderAnchor = createBucket<HTMLElement | null>(null);
   const newFolderName = createBucket("");
   const enablePreview = createBucket(false);
@@ -23,7 +23,7 @@ export default function CurrentPathBrowser() {
   let inputEl: HTMLSpanElement;
 
   const [files, filesAction] = createResource(
-    () => getBackend().listFiles(ctx.getPath()),
+    () => getBackend().listFiles(storage.getPath()),
     { initialValue: [] as StorageFile[] }
   );
 
@@ -39,7 +39,7 @@ export default function CurrentPathBrowser() {
     if (name.length === 0) {
       return;
     }
-    const p = ctx.getPath(name);
+    const p = storage.getPath(name);
     getBackend().createDirectory(p)
       .then(() => afterUpload(p));
   };
@@ -47,8 +47,8 @@ export default function CurrentPathBrowser() {
   const onImport = (inputElem: HTMLInputElement) => {
     if (inputElem.files) {
       for (let f of inputElem.files) {
-        getBackend().uploadFile(ctx.getPath(), f)
-          .then(() => afterUpload(ctx.getPath(f.name)));
+        getBackend().uploadFile(storage.getPath(), f)
+          .then(() => afterUpload(storage.getPath(f.name)));
       }
     }
   };
@@ -56,6 +56,14 @@ export default function CurrentPathBrowser() {
   onMount(() => {
     globalCustomEventRegistry.on(Events.Storage.ChangeWorkDir, (evt) => {
       filesAction.refetch();
+    });
+    globalCustomEventRegistry.on(Events.Storage.Select, (evt) => {
+      const file = evt.detail.file as StorageFile;
+      if (file.mediaType === "directory") {
+        storage?.open(Paths.resolvePath(file.path));
+      } else {
+        selectedFile(file);
+      }
     });
   })
 
@@ -110,19 +118,19 @@ export default function CurrentPathBrowser() {
           <Button onClick={() => enablePreview((prev) => !prev)}>
             { enablePreview() ? <FiEye size={16} /> : <FiEyeOff size={16} /> }
           </Button>
-          <Button onClick={() => ctx.backward()}>
+          <Button onClick={() => storage.backward()}>
             <IoArrowBackOutline />
           </Button>
-          <Button onClick={() => ctx.forward()}>
+          <Button onClick={() => storage.forward()}>
             <IoArrowForwardOutline />
           </Button>
         </ButtonGroup>
 
         <Breadcrumbs class="flex shrink-0 items-center" sx={{
         }}>
-          <For each={ctx.getPath().patterns()}>{(item, idx) => (
+          <For each={storage.getPath().patterns()}>{(item, idx) => (
             <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
-              onClick={() => ctx.changeCurrentPathByIdx(idx())}>
+              onClick={() => storage.changeCurrentPathByIdx(idx())}>
               {item}
             </Button>
           )}</For>
