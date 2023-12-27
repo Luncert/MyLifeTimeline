@@ -1,4 +1,4 @@
-package org.luncert.mylifetimeline.controller;
+package org.luncert.mylifetimeline.http;
 
 import static org.luncert.mylifetimeline.base.Constants.DIRECTORY;
 

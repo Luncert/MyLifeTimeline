@@ -39,7 +39,7 @@ export function FilePreviewElem(props: {
 
   return (
     <Show when={props.file !== null}>
-      <Paper class="flex w-2/3 h-max overflow-hidden">
+      <Paper class="flex w-max h-max max-w-2/3 overflow-hidden">
         <div class="w-max h-max">
           <Switch>
             <Match when={props.file.mediaType.startsWith("image")}>
