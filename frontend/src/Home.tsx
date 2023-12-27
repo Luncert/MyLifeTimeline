@@ -33,7 +33,7 @@ const entries: {[k: string]: EntryWithContent} = {
 }
 
 export default function Home() {
-  const activeEntry = createBucket("devices");
+  const activeEntry = createBucket("gallery");
   return (
     <Paper square class="relative w-full h-full flex">
       <HomeSidebar activeEntry={activeEntry} entries={entries} />
