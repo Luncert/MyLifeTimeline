@@ -7,3 +7,4 @@ target/
 */target
 deploy.sh
 storage/
+db.mv.db

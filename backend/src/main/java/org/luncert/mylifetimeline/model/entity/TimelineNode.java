@@ -18,6 +18,6 @@ public class TimelineNode {
 
   private String description;
 
-  @OneToMany(mappedBy = "timelineNode", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "node", cascade = CascadeType.ALL)
   private List<TimelineNodeSubItem> items;
 }

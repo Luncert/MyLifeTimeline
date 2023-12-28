@@ -9,6 +9,7 @@ import GalleryWithTimeline from "./views/gallery/GalleryWithTimeline";
 import { FaSolidTimeline } from 'solid-icons/fa';
 import { RiDeviceDeviceFill } from 'solid-icons/ri';
 import GoProConnection from "./views/devices/GoProConnection";
+import UsbConnection from "./views/devices/UsbConnection";
 
 interface EntryWithContent extends Entry {
   content: ValidComponent;
@@ -28,7 +29,7 @@ const entries: {[k: string]: EntryWithContent} = {
   devices: {
     name: "External Devices",
     icon: RiDeviceDeviceFill,
-    content: GoProConnection,
+    content: UsbConnection,
   }
 }
 
