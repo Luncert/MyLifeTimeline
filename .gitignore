@@ -8,3 +8,4 @@ target/
 deploy.sh
 storage/
 db.mv.db
+__pycache__
