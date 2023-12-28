@@ -29,7 +29,7 @@ const entries: {[k: string]: EntryWithContent} = {
   devices: {
     name: "External Devices",
     icon: RiDeviceDeviceFill,
-    content: UsbConnection,
+    content: GoProConnection,
   }
 }
 
