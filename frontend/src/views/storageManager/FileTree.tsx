@@ -1,7 +1,7 @@
 import { Button, IconButton, InputAdornment, TextField } from "@suid/material";
 import { BiRegularSearchAlt } from "solid-icons/bi";
 import { Accessor, For, Show, batch, createEffect, createMemo, createResource, onMount, useContext } from "solid-js";
-import { createBucket } from "../../mgrui/lib/components/utils";
+import { bucket } from "../../mgrui/lib/components/utils";
 import { FaSolidAngleDown, FaSolidAngleRight } from "solid-icons/fa";
 import { IoFolder, IoFolderOpen } from "solid-icons/io";
 import { MediaResourceIcon } from "./FileElement";
@@ -65,9 +65,9 @@ export function FileTreeNode(props: {
   onUnselect?: Consumer<StorageFile>;
   enableStorageEvent?: boolean;
 }) {
-  const expanded = createBucket(false);
+  const expanded = bucket(false);
   const isDirectory = props.file.mediaType === "directory";
-  const children = createBucket<StorageFile[] | null>(null);
+  const children = bucket<StorageFile[] | null>(null);
   const path = props.basePath.resolve(props.file.name);
 
   const load = () => {

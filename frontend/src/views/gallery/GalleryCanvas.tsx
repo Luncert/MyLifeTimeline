@@ -1,6 +1,6 @@
 import { For, ValidComponent, createContext } from "solid-js";
 import { GalleryCanvasControl } from "./GalleryCanvasControl";
-import { createBucket, createStampedBucket, useCtx } from "../../mgrui/lib/components/utils";
+import { bucket, stampedBucket, useCtx } from "../../mgrui/lib/components/utils";
 import MediaFile from "./MediaFile";
 import InteractElement from "./InteractElement";
 
@@ -18,10 +18,10 @@ export function useGalleryCanvas() {
 }
 
 export default function GalleryCanvas(){
-  const title = createBucket("");
-  const description = createBucket("");
-  const background = createBucket<string | null>(null);
-  const importedFiles = createStampedBucket<StorageFile[]>([]);
+  const title = bucket("");
+  const description = bucket("");
+  const background = bucket<string | null>(null);
+  const importedFiles = stampedBucket<StorageFile[]>([]);
 
   return (
     <GalleryCanvasContext.Provider value={{

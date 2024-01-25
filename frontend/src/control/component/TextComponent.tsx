@@ -1,5 +1,5 @@
 import { JSX, ValidComponent } from "solid-js";
-import { StoreBucket, createBucket, createStoreBucket } from "../../mgrui/lib/components/utils";
+import { StoreBucket, bucket, createStoreBucket } from "../../mgrui/lib/components/utils";
 import { BasicComponentProps } from "../ComponentBrowser";
 import InteractElement from "./InteractElement";
 
@@ -14,7 +14,7 @@ interface TextComponentProps {
 }
 
 function TextComponent(props: TextComponentProps) {
-  const editing = createBucket(false);
+  const editing = bucket(false);
   return (
     <InteractElement class="p-2 inline-block"
       draggable

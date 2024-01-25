@@ -1,5 +1,5 @@
 import { Button, Stack, TextField, Typography } from "@suid/material";
-import { createBucket } from "../../mgrui/lib/components/utils";
+import { bucket } from "../../mgrui/lib/components/utils";
 import StorageBrowserModal from "../storageManager/StorageBrowserModal";
 import { useGalleryCanvas } from "./GalleryCanvas";
 import { createEffect } from "solid-js";
@@ -7,8 +7,8 @@ import getBackend from "../../service/Backend";
 
 export default function PageSettings() {
   const canvas = useGalleryCanvas();
-  const openStorageBrowserModal = createBucket(false);
-  const background = createBucket<StorageFile | null>(null);
+  const openStorageBrowserModal = bucket(false);
+  const background = bucket<StorageFile | null>(null);
 
   const onCloseStorageBrowserModal = (selectedFiles: StorageFile[] | null) => {
     if (selectedFiles) {

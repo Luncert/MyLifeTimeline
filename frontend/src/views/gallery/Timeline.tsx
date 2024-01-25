@@ -1,5 +1,5 @@
 import { Popover, Stack, Typography } from "@suid/material";
-import { createBucket, names } from "../../mgrui/lib/components/utils";
+import { bucket, names } from "../../mgrui/lib/components/utils";
 
 interface TimelineNode {
   time: number;
@@ -20,8 +20,8 @@ function TimelineItems(props: {
   node: TimelineNode;
   offset: number;
 }) {
-  const anchorEl = createBucket<HTMLElement | null>(null);
-  const hovered = createBucket(false);
+  const anchorEl = bucket<HTMLElement | null>(null);
+  const hovered = bucket(false);
   return (
     <div class="absolute" style={{
       top: props.offset + "px"

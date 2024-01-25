@@ -1,5 +1,5 @@
 import { Show, createContext, createMemo } from "solid-js";
-import { createBucket, useCtx } from "../../mgrui/lib/components/utils";
+import { bucket, useCtx } from "../../mgrui/lib/components/utils";
 import { createDomEventRegistry, globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import { MediaResource } from "./Resource";
 import ResourceCanvas from "./ResourceCanvas";
@@ -18,9 +18,9 @@ export function useTimelineCreator() {
 
 export default function TimelineCreator() {
   const eventRegistry = createDomEventRegistry();
-  const dragging = createBucket<Res | null>(null);
-  const mousePosition = createBucket<Pos>([0, 0]);
-  const mouseOffsetToElement = createBucket<Pos>([0, 0]);
+  const dragging = bucket<Res | null>(null);
+  const mousePosition = bucket<Pos>([0, 0]);
+  const mouseOffsetToElement = bucket<Pos>([0, 0]);
   const draggingTo = createMemo(() => {
     const pos = mousePosition();
     const offset = mouseOffsetToElement();

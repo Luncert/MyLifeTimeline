@@ -1,7 +1,7 @@
 /// <reference types="web-bluetooth" />
 
 import { Button } from "@suid/material";
-import { createBucket, names } from "../../mgrui/lib/components/utils";
+import { bucket, names } from "../../mgrui/lib/components/utils";
 import { Show } from "solid-js";
 import Field from "../../mgrui/lib/components/Field";
 
@@ -34,8 +34,8 @@ async function enableAp(server: BluetoothRemoteGATTServer, on: boolean) {
 }
 
 export default function GoProConnection() {
-  const selectedDevice = createBucket<BluetoothDevice | null>(null);
-  const deviceConnected = createBucket(false);
+  const selectedDevice = bucket<BluetoothDevice | null>(null);
+  const deviceConnected = bucket(false);
 
   return (
     <div class="w-full h-full p-2">

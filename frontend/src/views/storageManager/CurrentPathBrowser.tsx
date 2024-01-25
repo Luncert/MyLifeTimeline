@@ -1,7 +1,7 @@
 import { Breadcrumbs, Button, ButtonGroup, Divider, IconButton, InputAdornment, Popover, Stack, TextField } from "@suid/material";
 import { IoArrowBackOutline, IoArrowForwardOutline } from 'solid-icons/io';
 import { For, createResource, onMount } from "solid-js";
-import { createBucket } from "../../mgrui/lib/components/utils";
+import { bucket } from "../../mgrui/lib/components/utils";
 import { CgFolderAdd } from 'solid-icons/cg';
 import { FaSolidCheck } from 'solid-icons/fa';
 import getBackend from "../../service/Backend";
@@ -15,9 +15,9 @@ import FilePreview from "./FilePreview";
 
 export default function CurrentPathBrowser() {
   const storage = useStorageManager();
-  const createNewFolderAnchor = createBucket<HTMLElement | null>(null);
-  const newFolderName = createBucket("");
-  const selectedFile = createBucket<StorageFile | null>(null);
+  const createNewFolderAnchor = bucket<HTMLElement | null>(null);
+  const newFolderName = bucket("");
+  const selectedFile = bucket<StorageFile | null>(null);
   let inputEl: HTMLSpanElement;
 
   const [files, filesAction] = createResource(

@@ -2,11 +2,11 @@
 import { Button, Divider } from "@suid/material";
 import { Show, createEffect, onMount } from "solid-js";
 import Field from "../../mgrui/lib/components/Field";
-import { createBucket, names } from "../../mgrui/lib/components/utils";
+import { bucket, names } from "../../mgrui/lib/components/utils";
 
 export default function UsbConnection() {
-  const selectedDevice = createBucket<USBDevice | null>(null);
-  const deviceConnected = createBucket(false);
+  const selectedDevice = bucket<USBDevice | null>(null);
+  const deviceConnected = bucket(false);
 
   createEffect(() => {
     const device = selectedDevice();

@@ -28,6 +28,7 @@
     "@suid/material": "^0.15.1",
     "@types/uuid": "^9.0.7",
     "axios": "^1.6.2",
+    "i18next": "^23.7.19",
     "interactjs": "^1.10.26",
     "sass": "^1.69.5",
     "solid-icons": "^1.1.0",

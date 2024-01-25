@@ -1,5 +1,5 @@
 import { For, ValidComponent, onMount } from "solid-js";
-import { conditionalValue, createBucket, removeElementsFromArray } from "../../mgrui/lib/components/utils";
+import { conditionalValue, bucket, removeElementsFromArray } from "../../mgrui/lib/components/utils";
 import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import { DraggableResource } from "./Resource";
 import Events from "../../Events";
@@ -20,8 +20,8 @@ export default function ResourceCanvas(props: {
   showGrid?: boolean;
 }) {
   const resourceSet = new Set<string>();
-  const items = createBucket<CanvasItem[]>([]);
-  const background = createBucket<Res | null>(null);
+  const items = bucket<CanvasItem[]>([]);
+  const background = bucket<Res | null>(null);
   let container: HTMLDivElement;
 
   onMount(() => {

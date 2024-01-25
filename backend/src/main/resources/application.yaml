@@ -1,8 +1,8 @@
 app:
   corsAllowedOrigins: http://localhost:3000
   storage:
-    path: storage
-    startupMode: overwrite
+    path: E:\Files\Media\
+    startupMode: append
 spring:
   servlet:
     multipart:

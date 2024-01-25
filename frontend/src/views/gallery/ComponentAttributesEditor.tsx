@@ -1,11 +1,11 @@
 import { Input, Typography } from "@suid/material";
 import Field from "../../mgrui/lib/components/Field";
-import { createBucket } from "../../mgrui/lib/components/utils";
+import { bucket } from "../../mgrui/lib/components/utils";
 
 export default function ComponentAttributesEditor() {
-  const rotation = createBucket(0);
-  const scale = createBucket(0);
-  const pos = createBucket<Pos>([0, 0]);
+  const rotation = bucket(0);
+  const scale = bucket(0);
+  const pos = bucket<Pos>([0, 0]);
   return (
     <div class="p-2">
       <div class="flex items-center gap-2">

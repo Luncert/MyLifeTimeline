@@ -39,7 +39,10 @@ export function FilePreviewElem(props: {
 
   return (
     <Show when={props.file !== null}>
-      <Paper class="flex w-max h-max max-w-2/3 overflow-hidden">
+      <Paper class="flex w-max h-max max-w-2/3 overflow-hidden" sx={{
+        maxWidth: "80%",
+        maxHeight: "80%"
+      }}>
         <div class="w-max h-max">
           <Switch>
             <Match when={props.file.mediaType.startsWith("image")}>
@@ -47,7 +50,7 @@ export function FilePreviewElem(props: {
                 style={{ "object-fit": "cover" }} />
             </Match>
             <Match when={props.file.mediaType.startsWith("video")}>
-              <video class="select-none"
+              <video class="select-none" controls
                 style={{ "object-fit": "contain" }}>
                 <source src={getBackend().getFileUrl(props.file)} />
               </video>

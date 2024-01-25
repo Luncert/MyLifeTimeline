@@ -1,6 +1,6 @@
 import interact from "interactjs"
 import { JSX, createEffect, onMount, splitProps } from "solid-js"
-import { conditionalString, createBucket, names } from "../../mgrui/lib/components/utils";
+import { conditionalString, bucket, names } from "../../mgrui/lib/components/utils";
 import { createDomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 
 export default function InteractElement(props: {
@@ -12,8 +12,8 @@ export default function InteractElement(props: {
   const [local, others] = splitProps(props, ["initialPos", "class", "draggable", "resizeable", "onFocusOrHover", "children"]);
   const initialPos = local.initialPos;
   let ref: HTMLDivElement
-  const focused = createBucket(false);
-  const hovered = createBucket(false);
+  const focused = bucket(false);
+  const hovered = bucket(false);
 
   createEffect(() => {
     local.onFocusOrHover?.(focused() || hovered());

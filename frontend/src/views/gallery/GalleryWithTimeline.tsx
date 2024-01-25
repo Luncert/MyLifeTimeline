@@ -4,7 +4,7 @@ import { IoAdd } from 'solid-icons/io';
 import { FiEdit2 } from 'solid-icons/fi';
 import ScrollBox from "../../mgrui/lib/components/ScrollBox";
 import StorageBrowserModal from "../storageManager/StorageBrowserModal";
-import { createBucket } from "../../mgrui/lib/components/utils";
+import { bucket } from "../../mgrui/lib/components/utils";
 import GalleryCanvas from "./GalleryCanvas";
 
 export default function GalleryWithTimeline() {

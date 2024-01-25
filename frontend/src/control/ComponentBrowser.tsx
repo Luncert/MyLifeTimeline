@@ -1,5 +1,5 @@
 import { Divider, ToggleButton, ToggleButtonGroup } from "@suid/material";
-import { createBucket } from "../mgrui/lib/components/utils";
+import { bucket } from "../mgrui/lib/components/utils";
 import { For, JSX, JSXElement, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { IoText } from 'solid-icons/io';
@@ -35,7 +35,7 @@ const components: {[k: string]: Component} = {
 }
 
 export default function ComponentBrowser() {
-  const selectedMenu = createBucket<string>("componentBrowser");
+  const selectedMenu = bucket<string>("componentBrowser");
 
   return (
     <div class="flex w-full h-full shrink">

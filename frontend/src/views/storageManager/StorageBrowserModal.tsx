@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Paper, Typography, useTheme } from "@suid/material";
 import { For, JSX, batch, createEffect, createResource } from "solid-js";
-import { createStampedBucket, names } from "../../mgrui/lib/components/utils";
+import { stampedBucket, names } from "../../mgrui/lib/components/utils";
 import { FileTreeNode } from "./FileTree";
 import Paths from "../../common/Paths";
 import getBackend from "../../service/Backend";
@@ -49,7 +49,7 @@ function StorageBrowserModalElem(props: {
     () => getBackend().listFiles(Paths.resolvePath("/"))
       .then(files => files.filter(props.filter)),
     { initialValue: [] as StorageFile[]});
-  const selectedFiles = createStampedBucket<Set<StorageFile>>(new Set());
+  const selectedFiles = stampedBucket<Set<StorageFile>>(new Set());
   let selectedFileScroll: HTMLDivElement;
 
   return (

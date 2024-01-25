@@ -1,6 +1,6 @@
 import { IconButton, Menu, MenuItem, MenuList, Paper, ThemeProvider, Typography } from "@suid/material";
 import { JSX, Match, Show, Switch, splitProps } from "solid-js";
-import { createBucket, names } from "../../mgrui/lib/components/utils";
+import { bucket, names } from "../../mgrui/lib/components/utils";
 import { AiFillDelete } from 'solid-icons/ai';
 import { useTimelineCreator } from "./TimelineCreator";
 import { useBackdrop } from "../../mgrui/lib/components/BackdropWrapper";
@@ -16,7 +16,7 @@ export function DraggableResource(props: {
   const [local, others] = splitProps(props, ['res', 'onRemove', "class", "elemWidth"]);
   const creator = useTimelineCreator();
   const backdrop = useBackdrop();
-  const hovered = createBucket(false);
+  const hovered = bucket(false);
 
   return (
     <div class={names("relative", local.class || "")}
