@@ -40,11 +40,11 @@ export function FilePreviewElem(props: {
   const isMobileBrowser = isMobile();
   return (
     <Show when={props.file !== null}>
-      <Paper class={names("w-max h-max max-w-2/3 overflow-hidden", isMobileBrowser ? "flex-col" : "flex items-center")} sx={{
+      <Paper class={names("w-max max-w-2/3 overflow-hidden", isMobileBrowser ? "flex-col" : "flex")} sx={{
         maxWidth: "80%",
         maxHeight: "80%"
       }}>
-        <div class={isMobileBrowser ? "w-full" : "w-max h-max"}>
+        <div class={names("flex flex-col justify-center", isMobileBrowser ? "w-full" : "w-max")}>
           <Switch>
             <Match when={props.file.mediaType.startsWith("image")}>
               <img class="select-none" draggable={false} src={getBackend().getFileUrl(props.file)}
