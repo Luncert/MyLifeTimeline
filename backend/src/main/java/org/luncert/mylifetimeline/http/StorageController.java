@@ -41,7 +41,8 @@ public class StorageController {
     Resource resource = storageService.loadAsResource(path);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.valueOf(file.getMediaType()));
-    headers.setContentDispositionFormData("attachment", file.getName());
+    // FIXME: utf8 encoding issue
+    // headers.setContentDispositionFormData("attachment", file.getName());
     headers.setContentLength(resource.contentLength());
     return new ResponseEntity<>(resource, headers, HttpStatus.OK);
   }

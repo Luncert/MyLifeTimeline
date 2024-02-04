@@ -1,0 +1,6 @@
+- prev and next button in file preview
+- file info in file preview is not correct
+- file icon overlayed file name
+- mark file as readonly
+- impl select and move file
+- adapte to phone

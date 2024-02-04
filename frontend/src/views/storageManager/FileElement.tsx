@@ -1,4 +1,4 @@
-import { IconButton, Typography } from "@suid/material";
+import { IconButton, Typography, useTheme } from "@suid/material";
 import { AiTwotoneFileText } from "solid-icons/ai";
 import { IoFolder } from "solid-icons/io";
 import { splitProps } from "solid-js";
@@ -12,12 +12,15 @@ export default function FileElement(props: {
   onSelect: Consumer<StorageFile>;
 }) {
   const ctx = useStorageManager();
+  const theme = useTheme();
   return (
     <IconButton class="relative" color="info" sx={{
       flexShrink: 0,
       borderRadius: 1.5,
       width: "5rem",
-      height: "5rem"
+      height: "5rem",
+      backgroundColor: 'rgb(18, 18, 18)',
+      backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))"
     }} onClick={() => {
       if (props.file.mediaType === 'directory') {
         ctx.openInCwd(props.file.name);

@@ -21,20 +21,20 @@ const entries: {[k: string]: EntryWithContent} = {
     icon: FaSolidFolderClosed,
     content: ResourceBrowser
   },
-  gallery: {
-    name: "Gallery",
-    icon: FaSolidTimeline,
-    content: GalleryWithTimeline,
-  },
-  devices: {
-    name: "External Devices",
-    icon: RiDeviceDeviceFill,
-    content: GoProConnection,
-  }
+  // gallery: {
+  //   name: "Gallery",
+  //   icon: FaSolidTimeline,
+  //   content: GalleryWithTimeline,
+  // },
+  // devices: {
+  //   name: "External Devices",
+  //   icon: RiDeviceDeviceFill,
+  //   content: GoProConnection,
+  // }
 }
 
 export default function Home() {
-  const activeEntry = bucket("gallery");
+  const activeEntry = bucket("resourceBrowser");
   return (
     <Paper square class="relative w-full h-full flex">
       <HomeSidebar activeEntry={activeEntry} entries={entries} />
