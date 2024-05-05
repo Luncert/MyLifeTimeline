@@ -2,11 +2,13 @@ import { Button, ButtonGroup, Paper } from "@suid/material";
 import { Match, Show, Switch, batch, createEffect, createMemo } from "solid-js";
 import getBackend from "../../service/Backend";
 import Field from "../../mgrui/lib/components/Field";
-import { TiCancel } from "solid-icons/ti";
+import { TiCancel, TiDownload } from "solid-icons/ti";
 import { AiFillDelete } from "solid-icons/ai";
 import { useBackdrop } from "../../mgrui/lib/components/BackdropWrapper";
 import { names } from "../../mgrui/lib/components/utils";
 import { isMobile } from "../../common/utils";
+import { useStorageManager } from "./StorageManager";
+import { Path } from "../../common/Paths";
 
 export default function FilePreview(props: {
   file: StorageFile | null;
@@ -66,6 +68,9 @@ export function FilePreviewElem(props: {
           <Field label="Last Modified Time" value={parseTimestamp(props.file.lastModifiedTime)} />
           <Field label="Last Access Time" value={parseTimestamp(props.file.lastAccessTime)} />
           <ButtonGroup class="mt-auto ml-auto" size="small">
+            <Button variant="contained" onClick={() => getBackend().downloadFile(new Path(props.file.path.split('/')))}>
+              <TiDownload size={20} />
+            </Button>
             <Button disabled variant="contained" color="error" onClick={() => props.onClose()}>
               <AiFillDelete size={20} />
             </Button>

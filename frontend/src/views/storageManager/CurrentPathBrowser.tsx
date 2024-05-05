@@ -12,7 +12,6 @@ import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegis
 import Events from "../../Events";
 import Paths, { Path } from "../../common/Paths";
 import FilePreview from "./FilePreview";
-import { isMobile } from "../../common/utils";
 
 export default function CurrentPathBrowser() {
   const storage = useStorageManager();
@@ -40,7 +39,8 @@ export default function CurrentPathBrowser() {
     }
     const p = storage.getPath(name);
     getBackend().createDirectory(p)
-      .then(() => afterUpload(p));
+      .then(() => afterUpload(p))
+      .finally(() => newFolderName(""));
   };
 
   const onImport = (inputElem: HTMLInputElement) => {
@@ -68,11 +68,19 @@ export default function CurrentPathBrowser() {
 
   return (
     <div class="relative flex flex-col w-full h-full shrink">
-      <Stack class="h-11 p-1 gap-x-1 shrink-0" direction="row">
-        <ButtonGroup class="shrink-0" variant="contained">
-          <Button onClick={(evt) => createNewFolderAnchor(evt.currentTarget)}>
+      <div class="flex flex-wrap w-full p-1 gap-x-1 shrink-0">
+        <div class="flex shrink-0 m-1 p-1 gap-2 bg-sky-500 rounded-md">
+          <IconButton size="small" onClick={() => storage.backward()}>
+            <IoArrowBackOutline />
+          </IconButton>
+
+          {/* <Button onClick={() => storage.forward()}>
+            <IoArrowForwardOutline />
+          </Button> */}
+
+          <IconButton size="small" onClick={(evt) => createNewFolderAnchor(evt.currentTarget)}>
             <CgFolderAdd />
-          </Button>
+          </IconButton>
           <Popover
             open={createNewFolderAnchor() !== null}
             anchorEl={createNewFolderAnchor()}
@@ -101,9 +109,9 @@ export default function CurrentPathBrowser() {
             />
           </Popover>
 
-          <Button onClick={() => inputEl.click()}>
+          <IconButton size="small" onClick={() => inputEl.click()}>
             <FiUpload />
-          </Button>
+          </IconButton>
           <label for="import-configuration-input">
             <input
               class="hidden"
@@ -114,28 +122,21 @@ export default function CurrentPathBrowser() {
             />
             <span ref={el => inputEl = el} class="hidden"></span>
           </label>
+        </div>
 
-          <Button onClick={() => storage.backward()}>
-            <IoArrowBackOutline />
-          </Button>
-          <Button onClick={() => storage.forward()}>
-            <IoArrowForwardOutline />
-          </Button>
-        </ButtonGroup>
+        <Breadcrumbs class="flex items-center" sx={{
+        }}>
+          <For each={storage.getPath().patterns()}>{(item, idx) => (
+            <IconButton color="primary" size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
+              onClick={() => storage.changeCurrentPathByIdx(idx())}>
+              {item}
+            </IconButton>
+          )}</For>
+        </Breadcrumbs>
+      </div>
 
-        <Show when={!isMobile()}>
-          <Breadcrumbs class="flex shrink-0 items-center" sx={{
-          }}>
-            <For each={storage.getPath().patterns()}>{(item, idx) => (
-              <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
-                onClick={() => storage.changeCurrentPathByIdx(idx())}>
-                {item}
-              </Button>
-            )}</For>
-          </Breadcrumbs>
-        </Show>
-      </Stack>
       <Divider />
+      
       <div class="w-full h-full shrink p-1 overflow-y-auto">
         <div class="flex flex-wrap gap-1">
           <For each={files()}>{file => (

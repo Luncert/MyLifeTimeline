@@ -44,6 +44,21 @@ class Backend {
       }
     });
   }
+  
+  public async downloadFile(path: Path): Promise<any> {
+    return axios.get(`/storage/${path}`, {
+      responseType: "blob",
+      withCredentials: true,
+    }).then((rep) => {
+      const href = URL.createObjectURL(rep.data);
+      const link = document.createElement("a");
+      link.href = href;
+      link.setAttribute('download', rep.headers["Content-Disposition"] || 'file');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    })
+  }
 
   public async createDirectory(path: Path): Promise<any> {
     return axios.post(`/storage/${path}`);

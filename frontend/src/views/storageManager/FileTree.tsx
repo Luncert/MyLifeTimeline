@@ -113,7 +113,7 @@ export function FileTreeNode(props: {
   return (
     <div>
       <Button fullWidth color={props.isActive?.(props.file) ? "primary" : "inherit"} size="small" startIcon={
-        <div class="inline-block flex gap-1">
+        <div class="flex gap-1">
           <Show when={isDirectory} fallback={<MediaResourceIcon file={props.file} />}>
             <Show when={expanded()} fallback={
               <>

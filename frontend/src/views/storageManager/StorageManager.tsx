@@ -1,11 +1,12 @@
 import { Divider } from "@suid/material";
-import { batch, createContext } from "solid-js";
+import { Show, batch, createContext } from "solid-js";
 import { copyOfRange, bucket, useCtx } from "../../mgrui/lib/components/utils";
 import FileTree from "./FileTree";
 import CurrentPathBrowser from "./CurrentPathBrowser";
 import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegistry";
 import Events from "../../Events";
 import Paths, { Path } from "../../common/Paths";
+import { isMobile } from "../../common/utils";
 
 interface StorageManagerContextDef {
   open: Consumer<Path>;
@@ -77,8 +78,10 @@ export default function StorageManager() {
       }
     }}>
       <div class="w-full h-full flex">
-        <FileTree />
-        <Divider orientation="vertical" />
+        <Show when={!isMobile()}>
+          <FileTree />
+          <Divider orientation="vertical" />
+        </Show>
         <CurrentPathBrowser />
       </div>
     </StorageManagerContext.Provider>
