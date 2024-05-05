@@ -72,8 +72,8 @@ export function MediaResourceIcon(props: {
   file: StorageFile;
 } & JSX.HTMLAttributes<HTMLElement>) {
   const [local, others] = splitProps(props, ["file"]);
-  const icon = local.file.mediaType in mediaTypeToIcon
-    ? (mediaTypeToIcon as any)[local.file.mediaType]
+  const icon = local.file?.mediaType in mediaTypeToIcon
+    ? (mediaTypeToIcon as any)[local.file?.mediaType]
     : AiTwotoneFileText;
   return (<Dynamic component={icon} file={local.file} {...others} />);
 }

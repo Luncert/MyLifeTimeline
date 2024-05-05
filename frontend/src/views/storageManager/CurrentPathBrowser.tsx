@@ -1,6 +1,6 @@
 import { Breadcrumbs, Button, ButtonGroup, Divider, IconButton, InputAdornment, Popover, Stack, TextField } from "@suid/material";
 import { IoArrowBackOutline, IoArrowForwardOutline } from 'solid-icons/io';
-import { For, createResource, onMount } from "solid-js";
+import { For, Show, createResource, onMount } from "solid-js";
 import { bucket } from "../../mgrui/lib/components/utils";
 import { CgFolderAdd } from 'solid-icons/cg';
 import { FaSolidCheck } from 'solid-icons/fa';
@@ -12,6 +12,7 @@ import { globalCustomEventRegistry } from "../../mgrui/lib/components/EventRegis
 import Events from "../../Events";
 import Paths, { Path } from "../../common/Paths";
 import FilePreview from "./FilePreview";
+import { isMobile } from "../../common/utils";
 
 export default function CurrentPathBrowser() {
   const storage = useStorageManager();
@@ -122,15 +123,17 @@ export default function CurrentPathBrowser() {
           </Button>
         </ButtonGroup>
 
-        <Breadcrumbs class="flex shrink-0 items-center" sx={{
-        }}>
-          <For each={storage.getPath().patterns()}>{(item, idx) => (
-            <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
-              onClick={() => storage.changeCurrentPathByIdx(idx())}>
-              {item}
-            </Button>
-          )}</For>
-        </Breadcrumbs>
+        <Show when={!isMobile()}>
+          <Breadcrumbs class="flex shrink-0 items-center" sx={{
+          }}>
+            <For each={storage.getPath().patterns()}>{(item, idx) => (
+              <Button size="small" sx={{ borderRadius: 2, paddingLeft: 2, paddingRight: 2, textTransform: "none" }}
+                onClick={() => storage.changeCurrentPathByIdx(idx())}>
+                {item}
+              </Button>
+            )}</For>
+          </Breadcrumbs>
+        </Show>
       </Stack>
       <Divider />
       <div class="w-full h-full shrink p-1 overflow-y-auto">
